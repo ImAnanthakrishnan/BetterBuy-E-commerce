@@ -1,4 +1,4 @@
-<section class="container-fluid" style="background-color: #8738;min-height:700px" >
+<section class="container-fluid" style="background-color: #8738;min-height:150vh" >
     <div style="padding-top: 150px;">
     <h1 class="text-center text-success" style="margin-top:">
         ORDER PLACED SUCCESSFULLY!!
@@ -9,4 +9,58 @@
        <a class="text-decoration-none me-5" style="margin:0 35%" href="/All"><button class="btn btn-secondary btn-rounded">Continue shopping</button></a> 
        <a class="text-decoration-none" href="/order-details"><button class="btn btn-secondary btn-rounded">View order</button></a> 
     </div>
+<div class="container mt-5 table-responsive" style="background-color:#8738;">
+    <table class="table mt-3 table-hover" id="userTable" style="background-color:#8738 !important;" >
+  
+  <thead >
+    <tr>
+     
+     
+      <th scope="col">Image</th>
+      <th scope="col">Name</th>
+      <th scope="col">Quantity</th>
+          <th scope="col">Total Price</th>
+         <!-- <th scope="col">Address</th>-->
+          <th scope="col">Full name</th>
+          <th scope="col">Phone</th>
+          <th scope="col">paymentMethod</th>
+      
+          <th scope="col">Date</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+
+     {{#each orderData as |value index|}}
+       
+        <tr>
+          
+         
+          <td>{{#each value.product}}<img src="/images/{{this.productId.images.[0]}}">{{/each}}</td>
+          <td>{{#each value.product}}{{this.productId.name}},{{/each}}</td>
+      
+          <td>{{value.quantity}}</td>
+          <td>{{value.totalPrice}}/-</td>
+         <!-- {{#each value.address}}
+          <td>{{this.address.address}}</td>
+          {{/each}}-->
+        <td>{{value.fullname}}</td>
+        <td>{{value.phone}}</td>
+         <td>{{value.paymentMethod}}</td>
+         <!-- <td>{{value.status}}</td>-->
+     
+           <td>{{value.createdAt}}</td>
+      <script>console.log('{{date}}')</script>
+       
+         
+          
+    
+        </tr>
+      
+         {{/each}}
+       
+  </tbody>
+
+</table>
+</div>
 </section>

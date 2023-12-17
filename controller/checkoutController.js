@@ -479,7 +479,8 @@ const razorpayVerify = async(req,res)=>{
 const orderPlaceLoad = async(req,res)=>{
     try{
         const log = req.session.user_id;
-        const orderData = await Order.find({userId:log}).populate('product.productId').populate('address').lean();
+        const orderData = await Order.find({userId:log}).populate('product.productId').populate('address').sort({_id:-1}).limit(1).lean();
+        console.log(orderData);
         res.render('user/orderplaced',{title:'Orderstatus',style:'style.css',user:true,log,orderData});
     }
     catch(err){
