@@ -1,0 +1,143 @@
+ <div
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0">
+              <div class="card-body">
+                <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100">
+                  <img src="images/" width="180" alt="">
+                </a>
+                <h3 class="text-center mb-3">OTP VERIFICATION</h3>
+               {{#if message}}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="">
+                      <strong> {{message}}</strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{/if}}
+                     {{#if smessage}}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="">
+                      <strong> {{smessage}}</strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{/if}}
+                     <!-- <div id="message-container">
+                  <p id="message"></p>
+                    </div>-->
+                   
+                  <div id="otpTimer" class="text-center mb-3"></div>
+                 
+                <form action="/verify-otp1" method="post" id="form">
+                  <div class="mb-2">
+                    <label for="exampleInputPassword1" class="form-label">Enter Otp</label>
+                    <input type="text" class="form-control" id="exampleInputPassword1" name="otp">
+                    <div class="error text-danger"></div>
+                    <input type="hidden" value="{{otps}}" class="form-control" id="exampleInputOtp1" name="userId">
+                     <input type="hidden" value="{{email}}" class="form-control" id="exampleInputOtp3" name="email">
+                     </div>
+                  <button type="submit" class=" btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Submit</button>
+                  </form>
+                  <div>
+                    <p id="timer">01:00</p>
+                  <form action="/resend-otp1" method="post" class=" p-2 width">
+                    <div class="mb-4">
+                        <input type="hidden" value="{{otps}}" class="form-control" id="exampleInputOtp1" name="userId">
+                        <input type="hidden" value="{{email}}" class="form-control" id="exampleInputOtp3" name="email">
+                    </div>
+                    <button type="submit" id="resendButton" class="btn btn-warning" style="display: none;">Resend</button>
+                  </form>
+                  </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                    <p class="fs-5 mb-0 ">Go back to general</p>
+                    <a class="text-primary fw-bold ms-2" href="/general">General</a>
+                  </div>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+    <script>
+
+
+const form = document.getElementById('form');
+const otp = document.getElementById('exampleInputPassword1');
+  form.addEventListener('submit',e=>{
+e.preventDefault();
+validateInputs();
+});
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+const validateInputs=()=>{
+ const otpValue = otp.value.trim();
+
+if(otpValue === ''){
+  setError(otp,'Empty details are not allowed. Enter the otp')
+}else if(otpValue.length<4 || otpValue.length>4){
+  setError(otp,'Not a valid otp');
+ }else{ 
+  setSuccess(otp);
+}
+
+ const allInputsValid = document.querySelectorAll('.success').length === 1; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+}
+
+let timer;
+  
+  function startTimer(duration, element) {
+    let timer = duration, minutes, seconds;
+ const interval = setInterval(function () {
+      minutes = parseInt(timer / 60, 10);
+      seconds = parseInt(timer % 60, 10);
+
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      element.textContent ="Resend otp-" +minutes + ":" + seconds;
+
+      if (--timer < 0) {
+        // Timer expired, show the resend button
+        document.getElementById("resendButton").style.display = "block";
+        clearInterval(interval);
+          const timerElement = document.getElementById("timer");
+  if (timerElement) {
+    timerElement.parentNode.removeChild(timerElement);
+  }
+      }
+    }, 1000);
+  }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const timerDuration = '{{ timerDuration }}';
+    console.log(timerDuration);
+    // Check if timerDuration is a valid number
+    if (!isNaN(timerDuration) && timerDuration > 0) {
+      const timerElement = document.getElementById("timer");
+      // Start the timer
+      startTimer(timerDuration, timerElement);
+    } else {
+      // Handle invalid timer duration
+      console.error("Invalid timer duration:", timerDuration);
+    }
+  });
+
+</script>

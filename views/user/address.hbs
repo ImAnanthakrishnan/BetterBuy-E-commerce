@@ -1,0 +1,78 @@
+<section style="min-height: 100vh; background-color:lightgreen">
+       <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            Account settings
+        </h4>
+         <div class="line mb-2">
+          </div>
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action active" data-toggle="list"
+                            href="/general">General</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="/password-settings">Change password</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="/address">Address</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-social-links">Social links</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-connections">Connections</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-notifications">Notifications</a>
+                            <hr>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content">
+
+                  
+ {{#if message}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+                        <!--<div class="tab-pane fade" id="account-change-password">-->
+                              <a href="/add-address" class="text-decoration-none "><button class="btnc mt-3"> ADD ADDRESS</button></a>
+<div class="row" style="background-color:#fff5ee;">
+    {{#each address}}
+    {{#each this.address}}
+  <div class="col-sm-6 mb-3 mb-sm-0 mt-3 ">
+    <div class="card w-50" style="background-color:#fff5ee;">
+      <div class="card-body">
+        <h5 class="card-title">PIN : {{this.pincode}}</h5>
+        <p class="card-text">{{this.address}}</p>
+
+        <a href="/address-settings?id={{this._id}}" class="btn btn-primary">View Details</a>
+         <a onclick="checker()" class="text-danger fs-3 ms-5 mt-2"  href="/delete-address?id={{this._id}}" ><i class="fa-solid fa-trash"></i></a>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+  {{/each}}
+</div>
+                       <!-- </div>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+<script>
+      function checker(){
+    var result = confirm('Are you sure?');
+    if(result == false){
+      event.preventDefault()
+    }
+  }
+
+</script>

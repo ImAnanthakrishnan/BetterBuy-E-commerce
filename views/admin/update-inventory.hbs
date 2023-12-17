@@ -1,0 +1,191 @@
+<section class="main-container">
+    <h2 class="text-center mt-1" style="font-weight:700 ;">Update Stock</h2>
+     {{#if err}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+    
+<div class="border border-5 border-secondary p-2">
+        <form  id="form" >
+            <!-- Email input -->
+        
+            <div class="form-floating mb-3">
+
+                <input type="text" name="quantity" class="form-control" id="floatingInput1"  value="{{product.quantity}}" >
+                <label for="floatingInput1">Quantity</label>
+                <div class="error text-danger"></div>
+            </div>
+             <div class="form-floating mb-3">
+                <input type="hidden" name="id" class="form-control" id="floatingid"
+                  value="{{product._id}}" required>
+                <label for="floatingid"></label>
+            </div>
+
+             <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Update</button>
+                  <a href="/admin/inventory"><h5>Back<span style="color: var(--color-primary);">Inventory</span></h5></a>
+              
+        </form>
+        </div>
+    </div>
+ 
+</section>
+
+<script>
+
+
+ document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('form');
+        const Price = document.getElementById('floatingInput1');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            validateInputs();
+        });
+
+        const setError = (element, message) => {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = message;
+            inputControl.classList.add('error');
+            inputControl.classList.remove('success');
+        }
+
+        const setSuccess = element => {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = '';
+            inputControl.classList.add('success');
+            inputControl.classList.remove('error')
+        }
+
+        const isValidPrice = price => {
+            return !isNaN(parseFloat(price)) && isFinite(price);
+        };
+
+        const validateInputs = () => {
+            const priceValue = Price.value.trim();
+
+            if (priceValue === '') {
+                setError(Price, 'Quantity is required');
+            } else if (!isValidPrice(priceValue)) {
+                setError(Price, 'Invalid price');
+            } else if (parseFloat(priceValue) < 0) {
+                setError(Price, 'Quantity cannot be negative');
+            } else {
+                setSuccess(Price);
+                update(); // Call the update function only if the validation passes
+            }
+        }
+
+        async function update() {
+            try {
+            //event.preventDefault();
+            //const form = event.target;
+                const formData = new FormData(form);
+
+                const response = await fetch('/admin/update-inventory', {
+                    method: 'PATCH',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+                    const quantity = document.getElementById('floatingInput1');
+                    quantity.value = result.updateStock.quantity;
+                   
+                } else {
+                    console.log('Failed to add to cart');
+                }
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        }
+    });
+
+
+
+
+ /*const form = document.getElementById('form');
+const Price = document.getElementById('floatingInput1');
+
+   form.addEventListener('submit',e=>{
+    e.preventDefault();
+    validateInputs();
+    });
+
+   const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidPrice = price=>{
+    return !isNaN(parseFloat(price)) && isFinite(price);
+};
+
+const validateInputs=()=>{
+ const priceValue = Price.value.trim();
+
+ if(priceValue === ''){
+setError(Price, 'Quantity is required');
+}else if(!isValidPrice(priceValue)){
+  setError(Price,'Invalid price')
+}else if(parseFloat(priceValue)<0){
+  setError(Price,'Quantity cannot be negative')
+}else{setSuccess(Price);
+update();
+}
+
+const allInputsValid = document.querySelectorAll('.success').length === 1; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+
+}
+
+    async function update(event){
+        try{
+            event.preventDefault();
+            const form = event.target;
+                const formData = new FormData(form);
+            //console.log(...formData)
+            const response = await fetch('/admin/update-inventory', {
+                method: 'PATCH',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(result.message);
+                const quantity = document.getElementById('floatingInput1');
+                quantity.value = result.updateStock.quantity
+                // Optionally, update the UI as needed without a page refresh
+            } else {
+                console.log('Failed to add to cart');
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    }
+    
+*/
+
+
+</script>

@@ -1,0 +1,215 @@
+ <!--<section class="container-fluid" >
+    <div class="d-flex justify-content-center align-items-center" style="height: 800px;">
+        {{#if err}}
+      <div class="alert alert-warning" role="alert">
+  {{message}}
+</div>
+{{/if}}
+       <form action="/signup" method="post"  class="  p-2  width">
+        <h2 class="mb-3">Create Account</h2>
+        <div class="mb-3">
+    <label for="exampleInputFirstname" class="form-label">First Name</label>
+    <input type="text" class="form-control" id="exampleInputFirstname"  name="fname">
+  </div>
+    <div class="mb-3">
+    <label for="exampleInputLastname" class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="exampleInputLastname"  name="lname">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPhone1" class="form-label">Phone Number</label>
+    <input type="tel" class="form-control" id="exampleInputPhone1"  name="phone">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+  </div>
+  
+ 
+</form>
+    </div>
+ </section>-->
+
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed" style=" background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/singleberry.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  ">
+   
+  
+
+ 
+
+
+    <div
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0"  style="background: linear-gradient(to bottom, rgba(20, 219, 20, 1), rgba(255, 255, 255, 1));">
+              <div class="card-body">
+                <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100 text-decoration-none">
+                  <img src="images/" width="180" alt="">
+              
+                </a>
+                <h3 class="text-center mb-3">Signup</h3>
+                <form action="/signup" method="post" id="form">
+                 <div class="mb-3 input-control1">
+                    <label for="exampleInputfname1" class="form-label">Firstname</label>
+                    <input type="text" class="form-control" id="exampleInputfname1"  name="fname">
+                    <div class="error text-danger"></div>
+                  </div>
+
+                   <div class="mb-3 input-control1">
+                    <label for="exampleInputlname1" class="form-label">Lastname</label>
+                    <input type="text" class="form-control" id="exampleInputlname1"  name="lname">
+                      <div class="error text-danger"></div>
+                  </div>
+
+                  <div class="mb-3 input-control1">
+                    <label for="exampleInputEmail1" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+                      <div class="error text-danger"></div>
+                      {{#if message}}
+                      <div class="err text-danger">{{message}}</div>
+                      {{/if}}
+                       {{#if message3}}
+                      <div class="err text-danger">{{message3}}</div>
+                      {{/if}}
+                  </div>
+
+                   <div class="mb-3 input-control1">
+                    <label for="exampleInputPhone1" class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="exampleInputPhone1" aria-describedby="emailHelp" name="phone">
+                      <div class="error text-danger"></div>
+                        {{#if message1}}
+                      <div class="err text-danger">{{message1}}</div>
+                      {{/if}}
+                        {{#if message2}}
+                      <div class="err text-danger">{{message2}}</div>
+                      {{/if}}
+                  </div>
+
+                  <div class="mb-4 input-control1">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                      <div class="error text-danger"></div>
+                  </div>
+      
+                  <button type="submit" class=" btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign up</button>
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p class="fs-5 mb-0 ">Already a member?</p>
+                    <a class="text-secondary fw-bold ms-2" href="/">login</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+<script>
+  const form = document.getElementById('form');
+const Firstname = document.getElementById('exampleInputfname1');
+ const Lastname = document.getElementById('exampleInputlname1')
+  const Email = document.getElementById('exampleInputEmail1')
+  const phone = document.getElementById('exampleInputPhone1')
+   const Password = document.getElementById('exampleInputPassword1')
+   
+form.addEventListener('submit',e=>{
+e.preventDefault();
+validateInputs();
+});
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidEmail = email => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+   return re.test(String(email).toLowerCase());
+ }
+
+const isValidPhoneNumber = phoneNumber => {
+  
+  const re = /^\d{10}$/;
+  return re.test(phoneNumber);
+};
+
+const isValidNumber = phoneNumber =>{
+   return !isNaN(parseFloat(phoneNumber)) && isFinite(phoneNumber);
+}
+
+const validateInputs=()=>{
+const fnameValue = Firstname.value.trim();
+const lnameValue = Lastname.value.trim();
+ const emailValue = Email.value.trim();
+  const phoneValue = phone.value.trim();
+   const passwprdValue = Password.value.trim();
+
+
+if(fnameValue === ''){
+setError(Firstname, 'Firstname is required');
+}else{
+setSuccess(Firstname)
+}
+
+if(lnameValue === ''){
+setError(Lastname, 'Lastname is required');
+}else{
+setSuccess(Lastname)
+}
+
+
+if(emailValue === ''){
+setError(Email,'Email is required');
+}else if(!isValidEmail(emailValue)){
+setError(Email,'Provide a valid email address');
+}else{
+setSuccess(Email)
+}
+
+if (phoneValue === '') {
+  setError(phone, 'Phone number is required');
+} else if (!isValidPhoneNumber(phoneValue)) {
+  setError(phone, 'Provide a valid 10-digit phone number');
+} else if(!isValidNumber(phoneValue)) {
+  setError(phone,'Invalid number');
+  }else{  setSuccess(phone);
+}
+
+if(passwprdValue === ''){
+setError(Password,'Password is required');
+}else if(passwprdValue.length < 6){
+setError(Password,'password must be at least 6 character.')
+}else{
+setSuccess(Password)
+}
+
+ const allInputsValid = document.querySelectorAll('.success').length === 5; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+};
+
+</script>
+
+  

@@ -1,0 +1,62 @@
+<div class=" main-container" style="">
+   
+ <h2 class=" text-center mb-4">Coupons</h2>
+
+  <a href="/admin/add-coupon" class="text-decoration-none"><button class="btnc ">ADD COUPONS</button></a>
+<table class="table my-3 table-hover" id="userTable">
+  {{#if coupons.length}}
+  <thead>
+    <tr>
+     
+      <th scope="col">No</th>
+  
+      
+          <th scope="col">Name</th>
+          <th scope="col">Discount</th>
+          <th scope="col">Expiry</th>
+          <th scope="col">Mininum amount</th>
+            <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+        {{#each coupons as |value index|}}
+     
+        <tr>
+          <td scope="row">{{index}}</td>
+       
+     
+         
+          <td>{{value.name}}</td>
+          <td>{{value.discount}}%</td>
+         
+          <td>{{value.expiry}}</td>
+          <td>{{value.purchase_amt}}/-</td>
+           
+          <td><a href="/admin/edit-coupon?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a>
+           <a onclick="checker()" class="text-danger " href="/admin/delete-coupon?id={{value._id}}" ><i class="fa-solid fa-trash"></i></a></td>
+        </tr>
+   
+         {{/each}}
+       
+  </tbody>
+  {{else}}
+  <p>No coupons available</p>
+  {{/if}}
+
+
+</table>
+</div>
+
+<script>
+  function checker(){
+    var result = confirm('Are you sure?');
+    if(result == false){
+      event.preventDefault()
+    }
+  }
+
+
+
+
+  </script>

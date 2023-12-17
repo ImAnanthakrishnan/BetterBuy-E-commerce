@@ -1,0 +1,123 @@
+
+ <div class=" main-container" style="">
+   <a href="/admin/add-product" class="text-decoration-none"><button class="btnc ">ADD PRODUCT </button></a>
+
+<table class="table my-3 table-hover" id="userTable">
+  {{#if productData.length}}
+  <thead>
+    <tr>
+     
+      <th scope="col">No</th>
+      <th scope="col">Image1</th>
+      <th scope="col">Image2</th>
+      <th scope="col">Image3</th>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Status</th>
+          <th scope="col">Description</th>
+          <th scope="col">Category</th>
+          <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+        {{#each productData as |value index|}}
+        {{#unless value.category_id.is_disabled}}
+        {{#unless value.is_disabled}}
+        <tr>
+          <td scope="row">{{index}}</td>
+        {{#if value.images.[0]}}
+          <td><img src="/images/{{value.images.[0]}}" alt="{{value.images.[0]}}"></td>
+          {{else}}
+           <td><p>Empty</p></td>
+          {{/if}}
+          {{#if value.images.[1]}}
+       <td><img src="/images/{{value.images.[1]}}" alt="{{value.images.[1]}}"></td>
+       {{else}}
+        <td><p>Empty</p></td>
+       {{/if}}
+       {{#if value.images.[2]}}
+       <td><img src="/images/{{value.images.[2]}}" alt="{{value.images.[2]}}"></td>
+       {{else}}
+       <td><p>Empty</p></td>
+       {{/if}}
+         
+          <td>{{value.name}}</td>
+          <td>{{value.price}}/-</td>
+          {{#if status}}
+          <td class="bg-success">{{value.status}}</td>
+          {{else}}
+           <td class="bg-danger">{{value.status}}</td>
+           {{/if}}
+          <td>{{value.description}}</td>
+          <td>{{value.category_id.category}}</td>
+          <td><a href="/admin/edit-product?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a>
+      <a onclick="checker()" class="text-danger " href="/admin/delete-product?id={{value._id}}" ><i class="fa-solid fa-trash"></i></a></td>
+        </tr>
+        {{/unless}}
+        {{/unless}}
+         {{/each}}
+       
+  </tbody>
+  {{else}}
+  <p>No products available</p>
+  {{/if}}
+
+
+</table>
+</div>
+
+
+<script>
+  function checker(){
+    var result = confirm('Are you sure?');
+    if(result == false){
+      event.preventDefault()
+    }
+  }
+
+
+  </script>
+
+ 
+
+
+<!--<main class="table">
+  <section class="table_header">
+    <h1>Product Details</h1>
+  </section>
+  <section class="table_body">
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+       <tbody>
+        {{#each productData as |value index|}}
+        <tr>
+          <td>{{index}}</td>
+          <td><img src="images/{{value.images}}" alt="{{value.images}}"></td>
+          <td>{{value.name}}</td>
+          <td>{{value.price}}</td>
+          <td>{{value.status}}</td>
+          <td>{{value.description}}</td>
+          <td>{{value.category_id}}</td>
+          <td><a href="/edit-product?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a>
+      <a class="text-danger " href="/delete-product?id={{value._id}}" ><i class="fa-solid fa-trash"></i></a></td>
+        </tr>
+         {{/each}}
+       </tbody>
+    </table>
+  </section>
+</main>
+</div>-->
+</div><!--continer grid-->
+

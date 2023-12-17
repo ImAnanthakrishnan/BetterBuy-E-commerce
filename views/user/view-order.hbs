@@ -1,0 +1,44 @@
+<section class="container-fluid" style="min-height:200vh;background-color:lightgreen;">
+  <h1 class="text-center mb-5 ">Order Details</h1>
+    <div class="line mb-2" style="margin: 0 35%;">
+          </div>
+   {{#each order.product}}
+    <div class="card mb-3 mx-auto mt-3" style="max-width: 540px;background-color:#fff5ee;">
+    
+  <div class="row g-0 ">
+     
+    <div class="col-md-4 ">
+      <img src="images/{{this.productId.images.[0]}}" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8 ">
+      <div class="card-body">
+        <h5 class="card-title">{{this.productId.name}}</h5>
+       <p class="card-text">Quantity:{{this.quantity}}</p>
+        <p class="card-text">Price:{{this.price}}/-</p>
+       <p class="card-text">Price(1):{{this.productId.price}}/-</p>
+       
+        <p class="card-text"><small class="text-body-secondary">{{this.productId.description}}</small></p>
+      
+      </div>
+    </div>
+    
+  </div>
+ 
+</div>
+ {{/each}}
+<div class="card text-center" style="background-color:#fff5ee;">
+  <div class="card-header">
+    Delivery Details
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Address</h5>
+    <p class="card-text">{{order.address.address}}</p>
+    <p class="card-text">Fullname:{{order.fullname}}</p>
+    <p class="card-text">Phone:{{order.phone}}</p>
+    
+  </div>
+  <div class="card-footer text-body-secondary">
+   {{order.createdAt}}
+  </div>
+</div>
+</section>

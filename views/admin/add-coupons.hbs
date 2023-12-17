@@ -1,0 +1,124 @@
+<section class="main-container" >
+   
+  {{#if message}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+  {{#if message1}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message1}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+ 
+       <form action="/admin/add-coupon" method="post" id="form"  class="  p-2  width border border-5 border-secondary" >
+        <h2 class="mb-3">Add Coupons</h2>
+        <div class="mb-3">
+    <label for="exampleInputFirstname" class="form-label">Coupon name</label>
+    <input type="text" class="form-control" id="exampleInputFirstname"  name="name" >
+     <div class="error text-danger"></div>
+  </div>
+       <div class="mb-3">
+    <label for="exampleInputFirstname1" class="form-label">Discount</label>
+    <input type="text" class="form-control" id="exampleInputFirstname1"  name="discount" >
+     <div class="error text-danger"></div>
+  </div>
+       <div class="mb-3">
+    <label for="exampleInputFirstname2" class="form-label">Expiry</label>
+    <input type="datetime-local" class="form-control" id="exampleInputFirstname2"  name="expiry" >
+     <div class="error text-danger"></div>
+  </div>
+         <div class="mb-3">
+    <label for="exampleInputFirstname3" class="form-label">Purchase Amount</label>
+    <input type="text" class="form-control" id="exampleInputFirstname3"  name="purchase" >
+     <div class="error text-danger"></div>
+  </div>
+  
+  
+  <button type="submit" class="btn btn-primary">ADD</button> <span>or <a href="/admin/coupons">return to coupon</a></span>
+</form>
+    </div>
+ </section>
+
+ <script>
+    const form = document.getElementById('form');
+    const Name = document.getElementById('exampleInputFirstname');
+    const Discount = document.getElementById('exampleInputFirstname1');
+     const Expiry = document.getElementById('exampleInputFirstname2');
+     const Purchase = document.getElementById('exampleInputFirstname3');
+       form.addEventListener('submit',e=>{
+    e.preventDefault();
+    validateInputs();
+    });
+
+    const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidPrice = price=>{
+    return !isNaN(parseFloat(price)) && isFinite(price);
+};
+const isValidPurchase = purchase=>{
+    return !isNaN(parseFloat(purchase)) && isFinite(purchase);
+};
+
+const validateInputs=()=>{
+   const nameValue = Name.value.trim();
+const discountValue = Discount.value.trim();
+const expiryValue = Expiry.value.trim();
+const purchaseValue = Purchase.value.trim();
+if(nameValue === ''){
+setError(Name, 'Name is required');
+}else{
+setSuccess(Name)
+}
+
+if(discountValue === ''){
+setError(Discount, 'Discount is required');
+}else if(!isValidPrice(discountValue)){
+  setError(Discount,'Invalid price')
+}else if(parseFloat(discountValue)<0){
+  setError(Discount,'Price cannot be negative')
+}else{setSuccess(Discount)
+}
+
+if(expiryValue === ''){
+setError(Expiry, 'Expiry is required');
+}else{
+setSuccess(Expiry);
+}
+
+if(purchaseValue === ''){
+setError(Purchase, 'Amount is required');
+}else if(!isValidPurchase(purchaseValue)){
+  setError(Purchase,'Invalid amount')
+}else if(parseFloat(purchaseValue)<0){
+  setError(Purchase,'Amount cannot be negative')
+}else{setSuccess(Purchase)
+}
+
+const allInputsValid = document.querySelectorAll('.success').length === 4; 
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+
+
+}
+
+ </script>

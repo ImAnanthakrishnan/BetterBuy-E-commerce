@@ -1,0 +1,359 @@
+<section class="product " style="min-height: 150vh; background-color:lightgreen">
+    <div class="">
+    <div class="" style="position: relative;">
+        <img src="/images/2.jpg" class="object-fit-contain w-100 " style="" alt="">
+        <div style="position: absolute; top: 50%; left: 58%; transform: translate(-50%, -50%); text-align: center; color: aliceblue; font-size: 50px; font-weight: bold;">
+            All Products
+            <div class="line my-4"> 
+             <p>Shop  now</p> 
+            </div> 
+        </div>
+    </div>
+
+  
+    </div>
+</div>
+
+    <div class="container ">
+       <div id="error_true" class="text-danger"></div>
+      <div class="row py-5 text-center">
+        <div class="col-lg-6 m-auto">
+          <p class="m-0">BetterBuy</p>
+          <h1>Our product</h1>
+          <div class="line my-4">
+          </div>
+          <p>
+Welcome to our all-products page, your gateway to a world of premium natural and organic goods. Immerse yourself in the richness of our meticulously curated selection, ranging from skincare essentials to wholesome food products. We take pride in offering a diverse array of items, all carefully chosen to promote a healthy and sustainable lifestyle. </p> 
+        </div>
+      </div>
+
+  <div class="d-flex justify-content-between m-1 border-2 border-top border-bottom  " style="border-color: rgba(20,219,20)!important;">
+        <div class="mt-4 fs-5"><span class="bi bi-filter me-2 mt-5" onclick="openFilter()"></span><span class="fil-title">Filter</span></div>
+    
+     <div id="customAlertContainer" class="custom-alert alert alert-danger alert-dismissible fade show mt-2" role="alert" style="display:none;">
+    <strong id="customAlertStrong"></strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+      <div class="dropdown mb-1 mt-2 fs-5">
+  <label for="">Sort by:</label>
+  <select name="category_id" id="" class="form-control">
+    <option value="">Select</option>
+    {{#each cat_data}}
+    <option value="{{this._id}}">{{this.category}}</option>
+    {{/each}}
+  </select>
+</div>
+  </div>
+ <div class="d-flex mt-2">
+   <aside id="sidebar" >
+      <div class="accordion   " id="accordionPanelsStayOpenExample" style="width: 100%;">
+        <form class="filterForm" onsubmit="filter(event)" >
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <div class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne" style="background-color: rgba(20,219,20);">
+        Price
+      </div><span class="material-symbols-outlined " onclick="closeSidebar1()">close</span>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+      <div class="accordion-body">
+     
+ <span> <input type="text" name="price1" class="" style="width: 40%;"></span><span class="me-1 ms-1">To</span><span><input type="text" name="price2" class="" style="width: 40%;"></span>
+    
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo" style="background-color: rgba(20,219,20);">
+        Stock
+      </div>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+      <div class="accordion-body">
+       
+              <label for="stock" >In stock</label><input type="checkbox" name="stock1" id="stock" class="ms-5" value="Available" onclick="handleCheckboxClick(this)" ><br>
+      <label for="stock1" >Out of stock</label><input type="checkbox" name="stock1" id="stock1" class="ms-3" value="Unavailable" onclick="handleCheckboxClick(this)">
+      
+      
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="background-color: rgba(20,219,20);">
+        Product Type
+      </div>
+    </h2>
+    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <a class="text-decoration-none" onclick="all()">All</a><br>
+         {{#each cat_data}}
+         
+      <label for="stock" >{{this.category}}</label><input type="checkbox" name="cat1" id="stock" class="ms-5" value="{{this._id}}" onclick="handleCheckboxClick(this)"><br>
+     {{/each}}
+    
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-success" style="width:100%" type="submit">Check</button>
+  </form>
+</div>
+
+</aside> 
+ 
+
+
+      <div class="row  pro-card " id="productCards">
+        {{#each product}}
+        {{#unless this.category_id.is_disabled}}
+        {{#unless this.is_disabled}}
+        <div class="col-lg-4 card-container" data-product-id="{{this._id}}">
+        <div class="card p-2" style="width: 20rem;height:30rem">
+          <div class="card-body">
+            <div class="star">
+              <span><i class="bi bi-star-fill"></i></span>
+              <span><i class="bi bi-star-fill"></i></span>
+              <span><i class="bi bi-star-fill"></i></span>
+              <span><i class="bi bi-star-fill"></i></span>
+            </div>
+            <img src="/images/{{this.images.[0]}}"  width="65%" height="40%" class=" pb-3 ms-5" alt="{{this.images}}">
+            <h4 class="head1">{{this.name}}</h4>
+            <p class="per1">{{this.description}}</p>
+            <h4 class="head1">Price:{{this.price}}/-</h4>
+            <form class="addToCartForm" onsubmit="addToCart(event)">
+            <input type="hidden" name="userId" value="{{../user._id}}">
+            <input type="hidden" name="productId" value="{{this._id}}">
+            <input type="hidden" name="price" value="{{this.price}}">
+            
+           {{#if is_cancelled}}
+            <button disabled type="submit"  class="btnc my-4 addToCartBtn"><i class="bi bi-x-circle-fill me-1 fs-3"></i>SOLD</button>
+            {{else}}
+              <button type="submit"  class="btnc my-4 addToCartBtn"><i class="bi bi-cart4 me-1 fs-3"></i> CART</button>
+            {{/if}}
+            
+            </form>
+
+            
+           <a href="/single-product?id={{this._id}} " class="text-decoration-none"><button class="btnc1">View</button ></a>
+          </div>
+        </div>
+      </div>
+      {{/unless}}
+      {{/unless}}
+      {{/each}}
+      
+  </div>
+    </div>
+
+<div class="pagination">
+  {{#if totalPages}}
+    {{#each pages}}
+      {{#if this.isCurrentPage}}
+        <span>{{this.page}}</span>
+      {{else}}
+        <a href="?page={{this.page}}">{{this.page}}</a>
+      {{/if}}
+    {{/each}}
+  {{/if}}
+</div>
+   </section>
+   <script>
+  function handleCheckboxClick(clickedCheckbox) {
+  const checkboxes = document.querySelectorAll('input[name="' + clickedCheckbox.name + '"]');
+  
+  checkboxes.forEach(function(checkbox) {
+    // Uncheck other checkboxes in the group
+    if (checkbox !== clickedCheckbox) {
+      checkbox.checked = false;
+    }
+  });
+}
+
+
+ function all(){
+
+  
+    window.location.reload();
+   // window.location.href="#productCards"
+}
+
+    
+
+
+async function uncheckStock(element) {
+  const status = element.dataset.status;
+  console.log(status)
+  try {
+    // Make a fetch request to the backend to get the list of products with the specified category
+    const response = await fetch(`/All?status=${status}`,{
+      method:'GET'
+    });
+    const data = await response.json();
+
+    // For simplicity, let's assume the backend returns a list of product IDs
+    const categoryProductIds = data.productIds.map(product=>String(product._id))
+   console.log(categoryProductIds)
+    // Update the UI to show/hide products based on category
+    document.querySelectorAll(".pro-card .col-lg-4").forEach(function(element) {
+      const productId = element.dataset.productId;
+      const isInCategory = categoryProductIds.includes(productId);
+
+      // Show or hide the product based on category
+      element.style.display = isInCategory ? "block" : "none";
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+
+
+
+async function filter(event) {
+
+  // Access the form using its I
+  try {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+  // console.log(...formData);
+// Construct query string from formData
+const queryString = new URLSearchParams(formData).toString();
+
+    // Make a fetch request to the backend to get the list of products with the specified category
+    const response = await fetch(`/All?${queryString}`,{
+      method:'GET'
+    });
+    const data = await response.json();
+    if(response.ok){
+
+    
+    // For simplicity, let's assume the backend returns a list of product IDs
+    const categoryProductIds = data.productIds.map(product=>String(product._id))
+   console.log(categoryProductIds)
+    // Update the UI to show/hide products based on category
+    document.querySelectorAll(".pro-card .col-lg-4").forEach(function(element) {
+      const productId = element.dataset.productId;
+      const isInCategory = categoryProductIds.includes(productId);
+
+      // Show or hide the product based on category
+      element.style.display = isInCategory ? "block" : "none";
+    });
+    }else{
+      console.log('Error')
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+
+
+   async function addToCart(event) {
+         // Prevent the form from submitting
+  
+        try {
+            event.preventDefault();
+
+            const form = event.target;
+
+             /* if (!form || !(form instanceof HTMLFormElement)) {
+            console.error('Form element not found or invalid.');
+            return;
+        }*/
+          const formData = new FormData(form);
+            //console.log(...formData)
+            const response = await fetch('/add-cart', {
+                method: 'POST',
+                body: formData,
+            });
+ const errorTrueElement = document.getElementById('error_true');
+   // const modalBody = document.querySelector('#exampleModal .modal-body');
+            if (response.ok) {
+                const result = await response.json();
+                //alert(result.message);
+            if (result.message) {
+            
+
+                // Dynamically create and show the modal
+                showDynamicModal(result.message);
+            }
+                // const customAlertContainer = document.getElementById('customAlertContainer');
+                //  const customAlertStrong = document.getElementById('customAlertStrong');
+
+                   //   customAlertStrong.textContent = result.message;
+                    //  customAlertContainer.style.display = 'block';           
+                // Optionally, update the UI as needed without a page refresh
+            } else {
+               const result = await response.json();
+                console.log('Failed to add to cart');
+                console.log(result.error)
+               //  const customAlertContainer = document.getElementById('customAlertContainer');
+                 /// const customAlertStrong = document.getElementById('customAlertStrong');
+
+                   //   customAlertStrong.textContent = result.error;
+                    //  customAlertContainer.style.display = 'block';           
+                showDynamicModal(result.error);
+                //window.location.href="#error_true";
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    }
+
+ function showDynamicModal(message) {
+    // Create a modal element
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Message</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ${message}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Append the modal to the body
+    document.body.appendChild(modal);
+    // Show the modal without jQuery
+    modal.classList.add('show');
+    modal.style.display = 'block';
+
+    // Add an event listener for closing the modal
+    const closeModalButton = modal.querySelector('[data-bs-dismiss="modal"]');
+    closeModalButton.addEventListener('click', function () {
+              //modal.classList.remove('show');
+      //  modal.style.display = 'none';
+closeModal();
+        // Remove the modal from the DOM after it's hidden
+       // document.body.removeChild(modal);
+    });
+        const okButton = modal.querySelector('.modal-footer .btn-secondary');
+    okButton.addEventListener('click', function () {
+        closeModal();
+    });
+    function closeModal() {
+        // Hide the modal
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+
+        // Remove the modal from the DOM after it's hidden
+        document.body.removeChild(modal); 
+    }
+}
+
+
+
+
+   </script>

@@ -1,0 +1,36 @@
+<section class="container" style="min-height: 80vh; background-color:lightgreen">
+<div class="wallet-container text-center">
+    <p class="page-title"><i class="fa-solid fa-align-left"></i>My E-wallet<i class="fa-solid fa-user"></i></p>
+
+  <div class="amount-box text-center">
+    <i class="fa-solid fa-wallet"></i>
+    <p>Total Balance</p>
+  
+    <p class="amount1">{{wallet.totalPrice}}/-</p>
+  </div>  
+
+<div class="btn-group text-center">
+    <button type="button" class="btn btn-outline-light">Add money</button>
+     <button type="button" class="btn btn-outline-light">widthdraw</button>
+</div>
+<div class="txn-history">
+   
+    <p><b>History</b></p>
+     {{#if orderData}}
+      <p class="txn-list">Nil<span class="debit-amount">0</span></p>
+   {{else}}
+    {{#each data}}
+    <p class="txn-list">Payment : {{this.paymentMethod}}&nbsp Qty : {{this.quantity}}<span class="debit-amount">+{{this.totalPrice}}/-</span></p>
+    {{/each}}
+     {{/if}}
+
+          {{#if orderData}}
+      <p class="txn-list">Nil<span class="credit-amount">0</span></p>
+   {{else}}
+    {{#each data1}}
+    <p class="txn-list">Payment : {{this.paymentMethod}}&nbsp Qty : {{this.quantity}}<span class="credit-amount">-{{this.totalPrice}}/-</span></p>
+    {{/each}}
+     {{/if}}
+</div>
+</div>
+</section>

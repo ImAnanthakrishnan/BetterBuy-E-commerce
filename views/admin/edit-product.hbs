@@ -1,0 +1,357 @@
+<section class="main-container">
+    <h2 class="text-center mt-1" style="font-weight:700 ;">Edit product</h2>
+     {{#if err}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+  
+   
+<div class="border border-5 border-secondary p-2">
+        <form action="/admin/edit-product" method="post" id="form" enctype="multipart/form-data" onsubmit="submitForm()">
+            <!-- Email input -->
+        
+            <div class="form-floating mb-3">
+
+                <input type="text" name="name" class="form-control" id="floatingInput1"  value="{{product.name}}" >
+                <label for="floatingInput1">Name</label>
+                <div class="error text-danger"></div>
+            </div>
+
+             <div class="form-floating mb-3">
+               
+                <input type="text" name="status" class="form-control" id="floatingInput3"  value="{{product.status}}" >
+                <label for="floatingInput3">Status</label>
+                <div class="error text-danger"></div>
+            </div>
+
+                 <div class="form-floating mb-3">
+               
+                <input type="text" name="price" class="form-control" id="floatingInput4"  value="{{product.price}}" >
+                <label for="floatingInput4">Price</label>
+                <div class="error text-danger"></div>
+            </div>
+
+                 <div class="form-floating mb-3">
+               
+                <input type="text" name="description" class="form-control" id="floatingInput5"  value="{{product.description}}" >
+                <label for="floatingInput5">Desciption</label>
+                <div class="error text-danger"></div>
+            </div>
+
+
+          
+             <div class="form-floating mb-3">
+                  <div class="d-flex flex-wrap" id="previews-container" style="display: inline-block; margin-right:10px">
+               
+            {{#each product.images as |value index|}}
+          
+            <img src="/images/{{value}}" class="imagePreview" id="preview" style="max-width: 200px; max-height: 200px;"  alt="{{value}}" >
+            <a  class="text-danger delete-icon" href="/admin/delete-image?pro={{../product._id}}&img={{index}}" onclick="hideIcon(this)"><i class="fa-solid fa-xmark"></i></a>
+    
+             {{/each}}
+            
+            </div>
+
+           <label for="exampleInputFile1" class="form-label">Image</label>
+            <div id="imagePreviewContainer"></div><br>
+            
+                <input type="file" name="images" class="form-control pre" id="floatingInput2"  value="" onchange="previewImages()"  multiple>
+                <label for="floatingInput2">Image</label>
+                <div class="error text-danger"></div>
+            </div>
+          
+               <div class="dropdown  mb-3">
+               
+                 <label for="">Select Category</label>
+                <select name="category_id" id="drop" class="form-control">
+                <option value="">{{product.category_id.category}}</option>
+                {{#each cat_data}}
+                <option value="{{this._id}}">{{this.category}}</option>
+                {{/each}}
+                </select>
+                <div class="error text-danger"></div>
+            </div>
+
+
+            <div class="form-floating mb-3">
+                <input type="hidden" name="id" class="form-control" id="floatingid"
+                  value="{{product._id}}" required>
+                <label for="floatingid"></label>
+            </div>
+              
+            <!-- 2 column grid layout for inline styling -->
+          
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Update</button>
+                  <a href="/admin/product"><h5>Back<span style="color: var(--color-primary);">Product</span></h5></a>
+
+           
+        </form>
+        </div>
+    </div>
+ 
+</section>
+<script>
+function hideIcon(element) {
+    // Ask for confirmation before proceeding
+    var isConfirmed = confirm("Are you sure you want to delete?");
+    
+    // If the user confirms, hide the icon
+    if (isConfirmed) {
+        // Find the delete icon and hide it
+        var icon = element.querySelector('i');
+        if (icon) {
+            icon.style.display = 'none';
+        }
+
+        // Perform the deletion operation or additional actions here
+    } else {
+        // If the user cancels, prevent the default behavior
+        event.preventDefault();
+    }
+}
+
+
+
+
+
+    /*function previewImage() {
+        const input = document.querySelectorAll('.floatingInput2')
+        const preview = document.querySelectorAll('.imagePreview');
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+         
+        }
+    }*/
+
+let selectedImages = [];
+
+ function previewImages() {
+        const input = document.querySelector('.pre');
+        const preview = document.getElementById('imagePreviewContainer');
+        const files = input.files;
+
+     
+
+            // Function to create a promise for each file
+              const readAndPreview = (file) => {
+            return new Promise((resolve, reject) => {
+                const imageContainer = document.createElement('div');
+                imageContainer.style.display = 'inline-block';
+                imageContainer.style.marginRight = '10px';
+
+                const img = document.createElement('img');
+                img.style.maxWidth = '300px';
+                img.style.maxHeight = '300px';
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                    resolve(imageContainer);
+                };
+                reader.readAsDataURL(file);
+                imageContainer.appendChild(img);
+                preview.appendChild(imageContainer);
+
+                selectedImages.push(file);
+            });
+        };
+        preview.innerHTML = '';
+    // Asynchronously process each file and create promises
+        const promises = Array.from(files).map(readAndPreview);
+
+        // Wait for all promises to be resolved
+        Promise.all(promises)
+            .then(() => {
+                console.log('All images loaded successfully');
+            })
+            .catch((error) => {
+                console.error('Error loading images:', error);
+            });
+ }
+
+function submitForm() {
+    // Access the selectedImages array and send it with the form data
+    // For example, you can use it with FormData:
+    const formData = new FormData(document.getElementById('form'));
+    selectedImages.forEach((image, index) => {
+        formData.append('newImages[]', image, `image_${index}`);
+    });
+}
+
+
+
+const form = document.getElementById('form');
+const Name = document.getElementById('floatingInput1');
+ const Status = document.getElementById('floatingInput3')
+  const Price = document.getElementById('floatingInput4')
+  const Desciption = document.getElementById('floatingInput5')
+ //const Image = document.querySelector('.pre');
+    //const Preview1 = document.getElementById('preview')
+  const Drop = document.getElementById('drop')
+   
+   form.addEventListener('submit',e=>{
+    e.preventDefault();
+    validateInputs();
+    });
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidPrice = price=>{
+    return !isNaN(parseFloat(price)) && isFinite(price);
+};
+
+const validateInputs=()=>{
+const nameValue = Name.value.trim();
+const statusValue = Status.value.trim();
+ const priceValue = Price.value.trim();
+  const descValue = Desciption.value.trim();
+//const imageValue = Image.value.trim();
+const dropValue = Drop.value.trim()
+
+
+if(nameValue === ''){
+setError(Name, 'Name is required');
+}else{
+setSuccess(Name)
+}
+if(statusValue === ''){
+setError(Status, 'Status is required');
+}else{
+setSuccess(Status)
+}
+
+if(priceValue === ''){
+setError(Price, 'Price is required');
+}else if(!isValidPrice(priceValue)){
+  setError(Price,'Invalid price')
+}else if(parseFloat(priceValue)<0){
+  setError(Price,'Price cannot be negative')
+}else{setSuccess(Price)
+}
+
+if(descValue === ''){
+setError(Desciption, 'Description is required');
+}else{
+setSuccess(Desciption)
+}
+
+//const files = Image.files;
+
+
+/*if( files.length === 0){
+setError(Image, 'File is required');
+}else if(files.length>3){
+  setError(Image,'Please select up to 3 files')
+}else{setSuccess(Image)
+}*/
+
+if(dropValue === ''){
+setError(Drop, 'Please select an option');
+}else{
+setSuccess(Drop)
+}
+
+const allInputsValid = document.querySelectorAll('.success').length >= 1; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+};
+
+
+
+
+  /*function previewImage() {
+  const input = document.getElementById('floatingInput2');
+  const previews = document.querySelectorAll('.imagePreview');
+  const files = input.files;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
+
+    reader.onload = (function (index) {
+      return function (e) {
+        previews[index].src = e.target.result;
+      };
+    })(i);
+
+    reader.readAsDataURL(file);
+  }
+}impp*/
+
+
+
+   /* function previewImage() {
+        const input = document.getElementById('floatingInput2');
+        const preview = document.getElementById('imagePreview');
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+         
+        }
+    }*/
+
+    /*function previewImage() {
+        const input = document.getElementById('floatingInput2');
+        const preview = document.getElementById('imagePreview2');
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+         
+        }
+    }*/
+</script>
+ <!-- <img src="/images/{{product.images.[1]}}" class="imagePreview" style="max-width: 200px; max-height: 200px;"  alt="{{product.images.[1]}}" >
+            <a  class="text-danger delete-icon" href="/delete-image?pro={{product._id}}&img={{product.images.[1]}}" onclick="hideIcon(this)"><i class="fa-solid fa-xmark"></i></a>
+            <img src="/images/{{product.images.[2]}}" class="imagePreview" style="max-width: 200px; max-height: 200px;"  alt="{{product.images.[2]}}" >
+            <a  class="text-danger delete-icon" href="/delete-image?pro={{product._id}}&img={{product.images.[2]}}" onclick="hideIcon(this)"><i class="fa-solid fa-xmark"></i></a>-->
+
+
+               <!--<a  class="text-danger " href="/delete-image?pro={{product._id}}&img={{product.images.[0]}}" ><i class="fa-solid fa-xmark"></i></a>
+                   <a  class="text-danger " href="/delete-image?pro={{product._id}}&img={{product.images.[1]}}" ><i class="fa-solid fa-xmark"></i></a>
+                      <a  class="text-danger " href="/delete-image?pro={{product._id}}&img={{product.images.[2]}}" ><i class="fa-solid fa-xmark"></i></a>-->
+  

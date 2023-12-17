@@ -1,0 +1,158 @@
+<section class="main-container" >
+   
+  {{#if err}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+ 
+       <form action="/admin/add-category" method="post" id="form"  class="  p-2  width border border-5 border-secondary" enctype="multipart/form-data">
+        <h2 class="mb-3">Add Category</h2>
+        <div class="mb-3">
+    <label for="exampleInputFirstname" class="form-label">Category name</label>
+    <input type="text" class="form-control" id="exampleInputFirstname"  name="category" >
+     <div class="error text-danger"></div>
+  </div>
+    <div class="mb-3">
+    <label for="exampleInputLastname" class="form-label">Image</label>
+       <img src="" id="imagePreview1" alt="Preview" style="max-width: 300px; max-height: 300px; margin-top: 10px; display:none;"><br>
+    <input type="file" class="form-control" id="exampleInputLastname"  name="image" onchange="previewImage()" >
+     <div class="error text-danger"></div>
+  </div>
+<!--  <div class="mb-3">
+    <label for="exampleInputLastname" class="form-label">Image</label>
+    <img src="" id="imagePreview1" alt="Preview" style="max-width: 300px; max-height: 300px; margin-top: 10px; display:none;">
+    <br>
+    <input type="file" class="form-control" id="exampleInputLastname" name="image" onchange="previewImage()">
+    <a class="text-decoration-none" style="cursor: pointer;" onclick="cropImage()">Crop</a>
+    <div class="error text-danger"></div>
+</div>-->
+  
+  
+  <button type="submit" class="btn btn-primary">ADD</button> <span>or <a href="/admin/category">return to category</a></span>
+</form>
+    </div>
+ </section>
+  <script>
+    function previewImage() {
+        const input = document.getElementById('exampleInputLastname');
+        const preview = document.getElementById('imagePreview1');
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                 preview.style.display = 'block'; 
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    }
+
+   /* let cropper; // Declare cropper variable globally
+
+function previewImage() {
+    const input = document.getElementById('exampleInputLastname');
+    const preview = document.getElementById('imagePreview1');
+    const file = input.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            // Set the image source
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+
+            // Initialize Cropper.js
+            cropper = new Cropper(preview, {
+                aspectRatio: 1, // You can adjust the aspect ratio as needed
+                viewMode: 2, // Set the view mode to display the cropped area
+
+            });
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = '';
+        preview.style.display = 'none';
+        if (cropper) {
+            cropper.destroy(); // Destroy the cropper instance if no file is selected
+        }
+    }
+}
+
+function cropImage() {
+  //event.preventDefault();
+    if (cropper) {
+        // Get the cropped data (base64 encoded)
+        const croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
+
+        // Display the cropped image or send it to the server as needed
+        const croppedPreview = document.getElementById('imagePreview1');
+        croppedPreview.src = croppedDataUrl;
+
+        // You can hide or destroy the cropper instance after cropping
+        cropper.destroy();
+        cropper = null;
+    }
+}
+*/
+
+
+const form = document.getElementById('form');
+const Name = document.getElementById('exampleInputFirstname');
+ const Image = document.getElementById('exampleInputLastname');
+
+ form.addEventListener('submit',e=>{
+    e.preventDefault();
+    validateInputs();
+    });
+
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+    const validateInputs=()=>{
+const nameValue = Name.value.trim();
+const imageValue = Image.value.trim();
+
+if(nameValue === ''){
+setError(Name, 'Name is required');
+}else{
+setSuccess(Name)
+}
+
+if(imageValue === ''){
+setError(Image, 'File is required');
+}else{
+setSuccess(Image)
+}
+
+const allInputsValid = document.querySelectorAll('.success').length === 2; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+};
+
+
+    
+
+</script>

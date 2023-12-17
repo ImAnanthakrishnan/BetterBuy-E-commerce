@@ -1,0 +1,208 @@
+<section class="container-fluid sproduct  pt-5" style="background-color: #fff5ee;min-height:150vh;">
+    <div class="row mx-auto">
+        <div class="col-lg-5 col-md-12 col-12">
+                 <div id="customAlertContainer" class="custom-alert alert alert-danger alert-dismissible fade show mt-2" role="alert" style="display:none;">
+    <strong id="customAlertStrong"></strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+            <img class="image-fluid w-100 pb-1" src="images/{{product.images.[0]}}" id="MainImg" alt="">
+            <div class="small-img-group">
+               <!-- {{#each product.images as |image|}}
+                 <div class="small-img-col me-5">
+                    <img src="images/{{image}}" width="100%" class="small-img" alt="">
+                </div>
+                {{/each}}-->
+                  <div class="small-img-col me-5">
+                    <img src="images/{{product.images.[0]}}" width="100%" class="small-img" alt="">
+                </div>
+                <div class="small-img-col me-5">
+                    <img src="images/{{product.images.[1]}}" width="100%" class="small-img" alt="">
+                </div>
+                 <div class="small-img-col">
+                    <img src="images/{{product.images.[2]}}" width="100%" class="small-img" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-12">
+            <h6>Home/{{product.category_id.category}}</h6>
+            <h3 class="py-3">{{product.name}}</h3>
+            <h2>Price : {{product.price}}/-</h2>
+           <form class="addtoCartForm" onsubmit="addToCart(event)">
+            <input type="hidden" name="userId" value="{{user._id}}">
+            <script>console.log('{{user._id}}')</script>
+              <input type="hidden" name="productId" value="{{product._id}}">
+               <input type="hidden" name="price" value="{{product.price}}">
+            <input type="number" name="quantity" style="height: 35px;background-color:lightgreen;" min="1" value="1">
+            {{#if product.is_cancelled}}
+            <button disabled type="submit" class="buy-btn addToCartBtn" aria-placeholder="1">SOLD</button>
+            {{else}}
+             <button type="submit" class="buy-btn addToCartBtn" aria-placeholder="1">Add To Cart</button>
+            {{/if}}
+            </form>
+            <h4 class="mt-4">Product Details</h4><hr style="width: 150px;">
+            <span class="mt-2">{{product.description}}
+            </span>
+             <div id="error_true" class="text-danger"></div>
+        </div>
+    </div>
+<div class="rate mt-5"><h4 class="m-3 text-light">Rate us</h4>
+    <div class="rating container">
+        <div class="post">
+            <div class="text">Thanks for rating us!</div>
+            <div class="edit">EDIT</div>
+        </div>
+        <div class="star-widget">
+            <input type="radio" name="rate" id="rate-5">
+            <label for="rate-5" class="fa-solid fa-star"></label>
+            <input type="radio" name="rate" id="rate-4">
+            <label for="rate-4" class="fa-solid fa-star"></label>
+            <input type="radio" name="rate" id="rate-3">
+            <label for="rate-3" class="fa-solid fa-star"></label>
+            <input type="radio" name="rate" id="rate-2">
+            <label for="rate-2" class="fa-solid fa-star"></label>
+            <input type="radio" name="rate" id="rate-1">
+            <label for="rate-1" class="fa-solid fa-star"></label>
+            <form action="#">
+                <header></header>
+                <div class="text-are">
+                    <textarea cols="30" placeholder="Descibe your experience.."></textarea>
+                </div>
+                <div class="btnstar">
+                    <button type="submit">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    </section>
+    <script>
+
+  async function addToCart(event) {
+         // Prevent the form from submitting
+  
+        try {
+            event.preventDefault();
+
+            const form = event.target;
+
+             /* if (!form || !(form instanceof HTMLFormElement)) {
+            console.error('Form element not found or invalid.');
+            return;
+        }*/
+          const formData = new FormData(form);
+            //console.log(...formData)
+            const response = await fetch('/add-cart1', {
+                method: 'POST',
+                body: formData,
+            });
+ const errorTrueElement = document.getElementById('error_true');
+            if (response.ok) {
+                const result = await response.json();
+                //alert(result.message);
+                console.log(result.message)
+                showDynamicModal(result.message);
+               // const customAlertContainer = document.getElementById('customAlertContainer');
+               //   const customAlertStrong = document.getElementById('customAlertStrong');
+
+                     // customAlertStrong.textContent = result.message;
+                    //  customAlertContainer.style.display = 'block';   
+                // Optionally, update the UI as needed without a page refresh
+            } else {
+                const result = await response.json();
+                console.log('Failed to add to cart');
+                console.log(result.error)
+                showDynamicModal(result.error);
+             // errorTrueElement.textContent = result.error
+        
+                
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    }
+
+    function showDynamicModal(message) {
+    // Create a modal element
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ${message}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Append the modal to the body
+    document.body.appendChild(modal);
+    // Show the modal without jQuery
+    modal.classList.add('show');
+    modal.style.display = 'block';
+
+    // Add an event listener for closing the modal
+    const closeModalButton = modal.querySelector('[data-bs-dismiss="modal"]');
+    closeModalButton.addEventListener('click', function () {
+              //modal.classList.remove('show');
+      //  modal.style.display = 'none';
+closeModal();
+        // Remove the modal from the DOM after it's hidden
+       // document.body.removeChild(modal);
+    });
+        const okButton = modal.querySelector('.modal-footer .btn-secondary');
+    okButton.addEventListener('click', function () {
+        closeModal();
+    });
+    function closeModal() {
+        // Hide the modal
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+
+        // Remove the modal from the DOM after it's hidden
+        document.body.removeChild(modal);
+    }
+}
+
+
+        console.log('script running')
+document.addEventListener('DOMContentLoaded', function () {
+  const mainImg = document.getElementById('MainImg');
+  const smallImgs = document.querySelectorAll('.small-img');
+
+  smallImgs.forEach(function(smallImg) {
+    smallImg.addEventListener('click', function() {
+      console.log('Clicked small image:', smallImg.src);
+      mainImg.src = smallImg.src;
+      console.log('Main image changed to:', mainImg.src);
+    });
+  });
+});
+  
+ 
+
+
+
+//rATING
+       /* const btn=document.querySelector("button");
+        const post=document.querySelector("post");
+        const widget=document.querySelector("star-widget");
+        const edit=document.querySelector("edit");
+        btn.onclick=()=>{
+            widget.style.display="none";
+            post.style.display="block";
+            edit.onclick=()=>{
+                widget.style.display="block";
+                post.style.display:"none"
+                return false;
+            }
+        }*/
+    </script>

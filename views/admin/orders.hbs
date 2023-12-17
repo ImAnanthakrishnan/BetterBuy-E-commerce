@@ -1,0 +1,138 @@
+<div class=" main-container" style="">
+  <h1 class="text-center mb-5">OrderDetails</h1>
+
+<table class="table my-3 table-hover" id="userTable">
+  
+  <thead>
+    <tr>
+     
+      <th scope="col">No</th>
+      <th scope="col">Image1</th>
+      <th scope="col">Name</th>
+      <th scope="col">Quantity</th>
+          <th scope="col">Total Price</th>
+         <!-- <th scope="col">Address</th>-->
+          <th scope="col">Full name</th>
+          <th scope="col">Phone</th>
+          <th scope="col">paymentMethod</th>
+          <th scope="col">Status</th>
+          <th scope="col">Date</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+
+     {{#each orderData as |value index|}}
+       
+        <tr>
+          <td scope="row">{{index}}</td>
+         
+          <td>{{#each value.product}}<img src="/images/{{this.productId.images.[0]}}">{{/each}}</td>
+          <td>{{#each value.product}}{{this.productId.name}},{{/each}}</td>
+      
+          <td>{{value.quantity}}</td>
+          <td>{{value.totalPrice}}/-</td>
+         <!-- {{#each value.address}}
+          <td>{{this.address.address}}</td>
+          {{/each}}-->
+        <td>{{value.fullname}}</td>
+        <td>{{value.phone}}</td>
+         <td>{{value.paymentMethod}}</td>
+         <!-- <td>{{value.status}}</td>-->
+         {{#if is_cancelled}}
+            <td>
+          <select disabled onchange="updateStatus('{{value._id}}', this.value)">
+            <option value="{{value.status}}">{{value.status}}</option>
+            <option value="Cancelled">Cancel</option>
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered" >Delivered</option>
+          </select>
+        </td>
+        {{else}}
+        <td>
+          <select  onchange="updateStatus('{{value._id}}', this.value)">
+            <option value="{{value.status}}">{{value.status}}</option>
+            <option value="Cancelled">Cancel</option>
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered" >Delivered</option>
+          </select>
+          
+          {{#if is_return}}
+   <button class="btn btn-primary text-dark" onclick="refund('{{value._id}}')" >Refund</button>
+
+          {{/if}}
+        </td>
+        {{/if}}
+           <td>{{value.createdAt}}</td>
+      <script>console.log('{{date}}')</script>
+       
+         
+          
+    
+        </tr>
+      
+         {{/each}}
+       
+  </tbody>
+
+</table>
+</div>
+<script>
+     function updateStatus(orderId, newStatus) {
+    // Send a post request with orderId and newStatus
+    fetch('/admin/update-status', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        orderId: orderId,
+        newStatus: newStatus,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message)
+      window.location.reload();
+    })
+     //window.location.reload();
+    .catch(error => {
+      console.error('Error updating status:', error);
+    });
+  }
+
+  function checker(){
+     var result = confirm('Are you sure?');
+    if(result == false){
+      event.preventDefault()
+    }else{
+        window.location.reload();
+    }
+  
+  }
+
+async function refund(orderId){
+    fetch('/admin/refund', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        orderId: orderId,
+      
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message)
+      window.location.reload();
+    })
+     //window.location.reload();
+    .catch(error => {
+      console.error('Error refunding:', error);
+    });
+}
+
+</script>

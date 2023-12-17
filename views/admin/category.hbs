@@ -1,0 +1,60 @@
+ <div class=" main-container index" style="">
+  <a href="/admin/add-category" class="text-decoration-none" ><button class="btnc "> ADD CATEGORY</button></a>
+<table class="table my-3 table-hover " id="userTable">
+  <thead>
+    <tr>
+      <th scope="col">No:</th>
+      <th scope="col">Category</th>
+      <th scope="col">Image</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+    {{#each categoryData as |value index|}}
+    {{#unless value.is_disabled}}
+    <tr>
+      <th  scope="row">{{index}}</th>
+      <td >{{value.category}}</td>
+       <td ><img src="images/{{value.image}}" width="150px" height="150px" alt="{{value.images}}"></td>
+     
+    
+      <td><a  href="/admin/edit-category?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a>
+      <a onclick="checker()" class="text-danger " href="/admin/delete-category?id={{value._id}}" ><i class="fa-solid fa-trash" ></i></a>
+      </td>
+    </tr>
+    {{/unless}}
+    {{/each}}
+  
+  </tbody>
+</table>
+<!--<div class="container" style="display: flex;justify-content:center;justify-items:center;">
+  <div>
+
+    <img src="/images/18.jpg" id="image" style="display: block;width:500px;height:600px;max-width:100%">
+    <button id="cropImageBtn">crop image</button>
+  </div>
+  <img src="" id="output" style="display: block;width:500px;height:600px;max-width:100% margin: 0 5px;">
+</div>
+</div>-->
+
+</div>
+<script>
+
+/*const image = document.getElementById('image');
+const cropper = new Cropper(image,{
+  aspectRatio:0,
+  viewMode:0,
+});
+document.getElementById('cropImageBtn').addEventListener('click',function(){
+  var croppedImage = cropper.getCroppedCanvas().toDataUrl("images/jpg");
+  document.getElementById('output').src=croppedImage;
+})*/
+
+  function checker(){
+    var result = confirm('Are you sure?');
+    if(result == false){
+      event.preventDefault()
+    }
+  }
+</script>

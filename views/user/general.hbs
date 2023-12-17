@@ -1,0 +1,198 @@
+<section  style="min-height: 100vh; background-color:lightgreen">
+    <div class="container light-style flex-grow-1 container-p-y">
+        <h4 class="font-weight-bold py-3 mb-4">
+            Account settings
+        </h4>
+         <div class="line mb-2">
+          </div>
+        <div class="card overflow-hidden">
+            <div class="row no-gutters row-bordered row-border-light">
+                <div class="col-md-3 pt-0 border border-3">
+                    <div class="list-group list-group-flush account-settings-links">
+                        <a class="list-group-item list-group-item-action active" data-toggle="list"
+                            href="/general">General</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="/password-settings">Change password</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="/address">Address</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-social-links">Social links</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-connections">Connections</a>
+                            <hr>
+                        <a class="list-group-item list-group-item-action" data-toggle="list"
+                            href="#account-notifications">Notifications</a>
+                            <hr>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="tab-content">
+
+{{#if message}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+
+                        <div class="tab-pane fade active show" id="account-general" style="background-color:#fff5ee;">
+                            <div class="card-body media align-items-center">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
+                                    class="d-block ui-w-80">
+                                <div class="media-body ml-4">
+                                    <label class="btn btn-outline-primary">
+                                        Upload new photo
+                                        <input type="file" class="account-settings-fileinput">
+                                    </label> &nbsp;
+                                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                </div>
+                            </div>
+                            <hr class="border-light m-0">
+                            <div class="card-body">
+                                <form action="/update-profile" method="post" id="form">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Firstname</label>
+                                    <input type="text" class="form-control mb-1" value="{{user.fname}}" name="fname" id="fname">
+                                    <div class="error text-danger"></div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Lastname</label>
+                                    <input type="text" class="form-control" value="{{user.lname}}" name="lname" id="lname">
+                                    <div class="error text-danger"></div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">E-mail</label>
+                                    <input type="text" class="form-control mb-1" value="{{user.email}}" name="email" id="email">
+                                    <div class="error text-danger"></div>
+                                    <!--<div class="alert alert-warning mt-3">
+                                        Verify you email. Please check your inbox.<br>
+                                        <a href="javascript:void(0)">Resend confirmation</a>
+                                    </div>-->
+                                    {{#if message1}}
+                                    <div class=" text-danger">{{message1}}</div>
+                                    {{/if}}
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" value="{{user.phone}}" name="phone" id="phone">
+                                    <div class="error text-danger"></div>
+                                    {{#if message2}}
+                                    <div class=" text-danger">{{message2}}</div>
+                                    {{/if}}
+                                </div>
+                                 <div class="text-right mt-3">
+                                    
+                                        <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+                                       <a href="/general" class="text-decoration-none"><button type="button" class="btn btn-secondary">Cancel</button></a> 
+                                 </div>
+                                 </form>
+                            </div>
+                        </div>
+                      
+                   
+                     
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+</section>
+
+<script>
+const form = document.getElementById('form');
+const Firstname = document.getElementById('fname');
+ const Lastname = document.getElementById('lname');
+  const Email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+
+  form.addEventListener('submit',e=>{
+e.preventDefault();
+validateInputs();
+});
+
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidEmail = email => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+   return re.test(String(email).toLowerCase());
+ }
+
+ const isValidPhoneNumber = phoneNumber => {
+  
+  const re = /^\d{10}$/;
+  return re.test(phoneNumber);
+};
+
+const isValidNumber = phoneNumber =>{
+   return !isNaN(parseFloat(phoneNumber)) && isFinite(phoneNumber);
+}
+
+const validateInputs=()=>{
+const fnameValue = Firstname.value.trim();
+const lnameValue = Lastname.value.trim();
+ const emailValue = Email.value.trim();
+  const phoneValue = phone.value.trim();
+ 
+if(fnameValue === ''){
+setError(Firstname, 'Firstname is required');
+}else{
+setSuccess(Firstname)
+}
+
+if(lnameValue === ''){
+setError(Lastname, 'Lastname is required');
+}else{
+setSuccess(Lastname)
+}
+
+
+if(emailValue === ''){
+setError(Email,'Email is required');
+}else if(!isValidEmail(emailValue)){
+setError(Email,'Provide a valid email address');
+}else{
+setSuccess(Email)
+}
+
+if (phoneValue === '') {
+  setError(phone, 'Phone number is required');
+} else if (!isValidPhoneNumber(phoneValue)) {
+  setError(phone, 'Provide a valid 10-digit phone number');
+} else if(!isValidNumber(phoneValue)) {
+  setError(phone,'Invalid number');
+  }else{  setSuccess(phone);
+}
+
+ const allInputsValid = document.querySelectorAll('.success').length === 4; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+
+};
+
+
+
+</script>

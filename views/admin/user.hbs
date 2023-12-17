@@ -1,0 +1,111 @@
+<div class="main-container " style="">
+     {{#if message}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+    <form>
+       <div class="input-group w-25 h-25 m-1 ">
+        <input type="text" class="form-control bg-warning" placeholder="Search" name="search">
+        <button class="btn btn-success">
+            <span class="bi bi-search"></span>
+            
+        </button>
+       
+    </div>
+    </form>
+    
+<table class="table my-3 table-hover" id="userTable">
+  <thead>
+    <tr>
+      <th scope="col">No:</th>
+      <th scope="col">Firstname</th>
+      <th scope="col">Lastname</th>
+      <th scope="col">Email</th>
+    
+      <th scope="col">Is_admin</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+ 
+    {{#each userData as |value index|}}
+    <tr>
+      <th scope="row">{{index}}</th>
+      <td>{{value.fname}}</td>
+      <td>{{value.lname}}</td>
+      <td>{{value.email}}</td>
+     
+      <td>{{value.is_admin}}</td>
+    
+      <td>
+ 
+        {{#if value.is_blocked}}
+       
+        <a href="/admin/unblock-user?id={{value._id}}"><i class="fa-solid fa-lock text-danger"></i></a><p class="fs-6">Blocked</p>
+        {{else}}
+        
+       <a href="/admin/block-user?id={{value._id}}"><i class="fa-solid fa-unlock"></i></a><p class="fs-6">Unblocked</p>
+        {{/if}}
+       <!-- {{#if value.is_blocked}}
+        <button class="toggle-block" data-id="{{value._id}}" data-blocked="{{value.is_blocked}}">
+          <i class="fa-solid fa-unlock"></i>Unblock
+        </button>
+        {{else}}
+        <button class="toggle-block" data-id="{{value._id}}" data-blocked="{{value.is_blocked}}">
+          <i class="fa-solid fa-lock"></i> Block
+        </button>
+          {{/if}}-->
+      </td>
+    
+    </tr>
+    {{/each}}
+ 
+  </tbody>
+</table>
+</div>
+
+</div>
+<script>
+/*document.addEventListener('DOMContentLoaded', function () {
+  const toggleButtons = document.querySelectorAll('.toggle-block');
+
+  toggleButtons.forEach(function (button) {
+    button.addEventListener('click', async function () {
+      const userId = button.getAttribute('data-id');
+      const isBlocked = JSON.parse(button.getAttribute('data-blocked'));
+   
+
+      try {
+        const response = await fetch(
+          isBlocked ? `/unblock-user?id=${userId}` : `/block-user?id=${userId}`,
+          {
+            method: 'PATCH',
+          }
+        );
+
+        const responseData = await response.json();
+      
+
+        
+        if (responseData.success) {
+         
+          button.setAttribute('data-blocked', !isBlocked);
+
+          if (isBlocked) {
+            button.innerHTML = '<i class="fa-solid fa-lock"></i> Block';
+          } else {
+            button.innerHTML = '<i class="fa-solid fa-unlock"></i> Unblock';
+          }
+
+          const message = isBlocked ? 'User unblocked' : 'User blocked';
+          alert(message);
+        }
+      } catch (error) {
+        console.error(error.message);
+      }
+    });
+  });
+});*/
+</script>

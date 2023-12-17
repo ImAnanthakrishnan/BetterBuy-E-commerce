@@ -1,0 +1,348 @@
+<!--<header class="  sticky-top" >
+    <nav class="d-flex justify-content-between " style="height: 50px; background:green">
+    <div class="ms-5 mt-2 fw-bold fs-5">BetterBuy</div>
+    <div class="input-group w-25  " style="height: 10px;">
+        <input type="text" class="form-control" placeholder="Search">
+        <button class="btn btn-success">
+            <span class="bi bi-search"></span>
+        </button>
+    </div>
+    <div class="mt-2 me-5">
+        <span class="bi bi-person-fill me-3 fs-5"></span>
+        <span class="bi bi-cart-fill me-3 fs-5"></span>
+    </div>
+    </nav>
+    <!--<nav class="d-flex justify-content-between w-50 second">
+       <span><a href="">Home</a></span>
+        <span><a href="">Groceries</a></span>
+        <span><a href="">OurStory</a></span>
+        <span><a href="">Contact</a></span>
+    </nav>-->
+   <!-- <nav class="navbar navbar-expand-lg bg-body-tertiary ">
+  <div class="container-fluid">
+   
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0  " >
+        <li class="nav-item pad  me-5">
+          <a class="nav-link active" aria-current="page" href="/home">Home</a>
+        </li>
+        <li class="nav-item pad  me-5">
+          <a class="nav-link" href="/grocery">Groceries</a>
+        </li>
+        <li class="nav-item pad  me-5">
+          <a class="nav-link" href="#">OurStory</a>
+        </li>
+        <li class="nav-item pad  me-5">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</header>-->
+
+<nav class="navbar navbar-expand-lg sticky-top" style="background-color: green;">
+  <div class="container">
+    <a class="navbar-brand" href="#"><h3>BetterBuy</h3></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class=""><i class="bi bi-list"></i></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link " href="/home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/grocery">Groceries</a>
+        </li>
+        <li class="nav-item ">
+          <a class="nav-link " href="#"  >
+           Blog
+          </a>
+          <!--<ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>-->
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="#">About</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link " href="#">Contact</a>
+        </li>
+      </ul>
+     <form class="d-flex" role="search"  id="searchForm" >
+        <div class="search-container">
+        <input class=" px-2 search" type="search" placeholder="Search" aria-label="Search" id="searchInput">
+         <div class="search-results" id="searchResults"></div>
+        </div>
+        <button class="btn1 me-2 px-3" type="submit">Search</button>
+        </form>  
+        <span class="me-3"><a href="/cart" class="text-decoration-none"><i class="bi bi-bag-check"></i></a></span>
+        <span class="dropdown"><i class="bi bi-person-circle " data-bs-toggle="dropdown" aria-expanded="false"></i>
+        <ul class="dropdown-menu dropdown-menu-dark">
+          {{#if log}}
+    <li><a class="dropdown-item " href="/general">Account settings</a></li>
+    <li><a class="dropdown-item" href="/order-details">Check orders</a></li>
+    <li><a class="dropdown-item" href="/wallet">Wallet</a></li>
+    <li><hr class="dropdown-divider"></li>
+    
+    <li><form action="/logout"  method="get">
+      
+    <button class="btn btn-dark dropdown-item" type="submit">Logout</button>
+    </form></li>
+     {{/if}}
+  </ul>
+  </span>
+  
+    </div>
+  </div>
+</nav>
+
+<script>
+
+
+    const searchInput = document.getElementById('searchInput');
+    const searchResultsContainer = document.getElementById('searchResults');
+    const searchForm = document.getElementById('searchForm');
+
+    searchInput.addEventListener('input', function () {
+        const searchItem = searchInput.value.trim();
+
+        if (searchItem === '') {
+            searchResultsContainer.innerHTML = '';
+            searchResultsContainer.style.display = 'none';
+        }
+    });
+
+
+
+    searchForm.addEventListener('submit', async function (event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        const searchItem = searchInput.value.trim();
+
+        searchResultsContainer.innerHTML = '';
+
+        const response = await fetch(`/home?item=${searchItem}`, {
+            method: 'GET'
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const products = data.product;
+
+            if (products.length === 0) {
+                searchResultsContainer.innerHTML = '<p>No results found</p>';
+            } else {
+                products.forEach(product => {
+                    const productContainer = document.createElement('div');
+                    productContainer.classList.add('product-container');
+
+                    const productName = document.createElement('p');
+                    productName.textContent = product.name;
+                    // productName.classList.add('product-name');
+
+                    const productImage = document.createElement('img');
+                    productImage.src = `/images/${product.images[0]}`;
+                     productImage.alt = 'Product Image';
+                    productImage.classList.add('product-image');
+
+                    /*if (Array.isArray(product.images) && product.images.length > 0) {
+                        
+                    }*/
+
+                   
+
+                    productContainer.addEventListener('click', function () {
+                      redirectToSingleProductPage(product._id);
+                    });
+
+
+    
+                    productContainer.appendChild(productName);
+                    productContainer.appendChild(productImage);
+
+                    searchResultsContainer.appendChild(productContainer);
+                });
+                 searchResultsContainer.style.display = 'block';
+            }
+        }
+      
+    });
+
+ function redirectToSingleProductPage(productId) {
+       
+        window.location.href = `/single-product?id=${productId}`;
+ }
+
+///////////////////////////////////////////////////////////////////////////////
+
+    /*searchInput.addEventListener('focus', function () {
+        const searchItem = searchInput.value.trim();
+
+        if (searchItem !== '') {
+            searchResultsContainer.style.display = 'block';
+        }
+    });
+
+    searchInput.addEventListener('blur', function () {
+        searchResultsContainer.style.display = 'none';
+    });*/
+
+
+
+
+
+
+
+
+
+/*const searchInput = document.getElementById('searchInput');
+  const searchResultsContainer = document.getElementById('searchResults');
+const searchForm = document.getElementById('searchForm');
+
+searchInput.addEventListener('input', function () {
+    const searchItem = searchInput.value.trim();
+
+    if (searchItem === '') {
+        searchResultsContainer.innerHTML = '';
+        searchResultsContainer.style.display = 'none';
+    }
+});
+
+searchForm.addEventListener('focus', function () {
+    const searchItem = searchInput.value.trim();
+
+    if (searchItem !== '') {
+        searchResultsContainer.style.display = 'block';
+    }
+});
+
+searchForm.addEventListener('blur', function () {
+    searchResultsContainer.style.display = 'none';
+});
+
+
+
+
+searchForm.addEventListener('submit', async function (event) {
+    event.preventDefault();  // Prevent the default form submission behavior
+
+    const searchItem = searchInput.value.trim();
+    console.log('helo');
+    console.log(searchItem);
+
+    searchResultsContainer.innerHTML = '';
+
+    const response = await fetch(`/home?item=${searchItem}`, {
+        method: 'GET'
+    });
+
+    console.log('helo1');
+
+    if (response.ok) {
+        const data = await response.json();
+        const products = data.product;
+        console.log(products);
+
+        if (products.length === 0) {
+            searchResultsContainer.innerHTML = '<p>No results found</p>';
+        } else {
+            products.forEach(product => {
+                const productContainer = document.createElement('div');
+                productContainer.classList.add('product-container');
+
+                const productName = document.createElement('p');
+                productName.textContent = product.name;
+
+                const productImage = document.createElement('img');
+
+                if (Array.isArray(product.images) && product.images.length > 0) {
+                    productImage.src = `/images/${product.images[0]}`;
+                }
+
+                productImage.alt = 'Product Image';
+
+                productContainer.appendChild(productName);
+                productContainer.appendChild(productImage);
+
+                searchResultsContainer.appendChild(productContainer);
+            });
+        }
+    }
+});
+*/
+
+
+/*async function search(){
+  try{
+    event.preventDefault();
+
+    const searchItem = searchInput.value
+  const searchResultsContainer = document.getElementById('searchResults');
+  console.log('helo')
+  console.log(searchItem)
+
+   // Clear previous search results
+      searchResultsContainer.innerHTML = '';
+
+     const response = await fetch(`/home?item=${searchItem}`,{
+      method:'GET'
+     });
+  console.log('helo1')
+     if(response.ok){
+      const data = await response.json()
+        const products = data.product;
+      console.log(products)
+ 
+
+     if (products.length === 0) {
+    // Display a message when no results are found
+    searchResultsContainer.innerHTML = '<p>No results found</p>';
+     }else{
+
+          products.forEach(product => {
+      const productContainer = document.createElement('div');
+      productContainer.classList.add('product-container');
+
+      const productName = document.createElement('p');
+      productName.textContent = product.name;
+
+      const productImage = document.createElement('img');
+    
+              if (Array.isArray(product.images) && product.images.length > 0) {
+                productImage.src = `/images/${product.images[0]}`;
+            }
+
+      productImage.alt = 'Product Image';
+
+      // Append product name and image to the container
+      productContainer.appendChild(productName);
+      productContainer.appendChild(productImage);
+
+      // Append the product container to the search results container
+      searchResultsContainer.appendChild(productContainer);
+    });
+  }
+
+     
+    }else{
+    console.log('No response');
+    }
+   
+  }
+  catch(err){
+      console.log('Error:', err);
+  }
+     
+   
+  }
+*/
+
+</script>

@@ -1,0 +1,56 @@
+<div class=" main-container" style="">
+  
+ <h2 class=" text-center mb-4">Inventory</h2>
+<table class="table my-3 table-hover" id="userTable">
+  {{#if productData.length}}
+  <thead>
+    <tr>
+     
+      <th scope="col">No</th>
+      <th scope="col">Image</th>
+      
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Category</th>
+          <th scope="col">Status</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+
+        {{#each productData as |value index|}}
+        {{#unless value.category_id.is_disabled}}
+        {{#unless value.is_disabled}}
+        <tr>
+          <td scope="row">{{index}}</td>
+        {{#if value.images.[0]}}
+          <td><img src="/images/{{value.images.[0]}}" alt="{{value.images.[0]}}"></td>
+          {{else}}
+           <td><p>Empty</p></td>
+          {{/if}}
+     
+         
+          <td>{{value.name}}</td>
+          <td>{{value.price}}/-</td>
+         
+          <td>{{value.category_id.category}}</td>
+           
+          
+          <td class="bg-success">{{value.status}}</td>
+
+           <td>{{value.quantity}}</td>
+          <td><a href="/admin/update-inventory?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+        </tr>
+        {{/unless}}
+        {{/unless}}
+         {{/each}}
+       
+  </tbody>
+  {{else}}
+  <p>No products available</p>
+  {{/if}}
+
+
+</table>
+</div>

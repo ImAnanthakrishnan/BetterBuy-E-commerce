@@ -1,0 +1,248 @@
+ <section class="main-container" >
+  
+
+ {{#if err}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+       <form action="/admin/add-product" method="post" id="form" class="  p-2  width border border-5 border-secondary " enctype="multipart/form-data" onsubmit="submitForm()">
+        <h2 class="mb-3 ms-5">Add products</h2>
+        <div class="mb-3">
+    <label for="exampleInputName" class="form-label">Name</label>
+    <input type="text" class="form-control" id="exampleInputName"  name="name" >
+    <div class="error text-danger"></div>
+  </div>
+    <div class="mb-3">
+    <label for="exampleInputStatus" class="form-label">Status</label>
+    <input type="text" class="form-control" id="exampleInputStatus"  name="status">
+     <div class="error text-danger"></div>
+  </div>
+   <div class="mb-3">
+    <label for="exampleInputStatus" class="form-label">Quantity</label>
+    <input type="text" class="form-control" id="exampleInputQuantity"  name="quantity">
+     <div class="error text-danger"></div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPrice" class="form-label">Price</label>
+    <input type="text" class="form-control" id="exampleInputPrice"  name="price" >
+     <div class="error text-danger"></div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputDesc" class="form-label">Desciption</label>
+    <input type="text" class="form-control" id="exampleInputDesc"  name="description">
+     <div class="error text-danger"></div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputImage" class="form-label">Image</label>
+    <div id="imagePreviewContainer"></div><br>
+    <input type="file" class="form-control" id="exampleInputImage" name="images" multiple onchange="previewImages()" />
+    <div class="error text-danger"></div>
+  </div>
+
+  <div class="dropdown mb-4">
+  <label for="">Select Category</label>
+  <select name="category_id" id="drop" class="form-control">
+    <option value="">Select Categories</option>
+    {{#each cat_data}}
+    <option value="{{this._id}}">{{this.category}}</option>
+    {{/each}}
+  </select>
+  <div class="error text-danger"></div>
+</div>
+  
+  <button type="submit" class="btn btn-primary">ADD</button> <span>or <a href="/admin/product">return to product</a></span>
+</form>
+    </div>
+ </section>
+ <script>
+  let selectedImages = [];
+    function previewImages() {
+        const input = document.getElementById('exampleInputImage');
+        const preview = document.getElementById('imagePreviewContainer');
+        const files = input.files;
+
+       // Clear existing previews
+        
+
+            // Function to create a promise for each file
+              const readAndPreview = (file) => {
+            return new Promise((resolve, reject) => {
+                const imageContainer = document.createElement('div');
+                imageContainer.style.display = 'inline-block';
+                imageContainer.style.marginRight = '10px';
+
+                const img = document.createElement('img');
+                img.style.maxWidth = '300px';
+                img.style.maxHeight = '300px';
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                    resolve(imageContainer);
+                };
+                reader.readAsDataURL(file);
+                imageContainer.appendChild(img);
+                preview.appendChild(imageContainer);
+
+                 selectedImages.push(file);
+            });
+        };
+          preview.innerHTML = '';
+    // Asynchronously process each file and create promises
+        const promises = Array.from(files).map(readAndPreview);
+
+        // Wait for all promises to be resolved
+        Promise.all(promises)
+            .then(() => {
+                console.log('All images loaded successfully');
+            })
+            .catch((error) => {
+                console.error('Error loading images:', error);
+            });
+        
+function submitForm() {
+    // Access the selectedImages array and send it with the form data
+    // For example, you can use it with FormData:
+    const formData = new FormData(document.getElementById('form'));
+    selectedImages.forEach((image, index) => {
+        formData.append('newImages[]', image, `image_${index}`);
+    });
+}
+          // Loop through selected files
+      /*  for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            // Create a new container for each image preview
+            const imageContainer = document.createElement('div');
+              imageContainer.style.display = 'inline-block'
+            imageContainer.style.marginRight = '10px';
+
+            // Create a new image element for each file
+            const img = document.createElement('img');
+            img.style.maxWidth = '300px';
+            img.style.maxHeight = '300px';
+
+            // Set up FileReader to read the image data
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Append the image to the image container
+            imageContainer.appendChild(img);
+
+            // Append the image container to the preview container
+            previewContainer.appendChild(imageContainer);
+        }*/
+}
+
+ const form = document.getElementById('form');
+const Name = document.getElementById('exampleInputName');
+ const Status = document.getElementById('exampleInputStatus')
+ //const Quantity = document.getElementById('exampleInputQuantity')
+  const Price = document.getElementById('exampleInputPrice')
+  const Desciption = document.getElementById('exampleInputDesc')
+  const Image = document.getElementById('exampleInputImage')
+  const Drop = document.getElementById('drop')
+   
+   form.addEventListener('submit',e=>{
+    e.preventDefault();
+    validateInputs();
+    });
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidPrice = price=>{
+    return !isNaN(parseFloat(price)) && isFinite(price);
+};
+
+/*const isValidQuantity = quantity=>{
+    return !isNaN(quantity) && isFinite(quantity);
+};*/
+
+const validateInputs=()=>{
+const nameValue = Name.value.trim();
+const statusValue = Status.value.trim();
+//const quantityValue = Quantity.value.trim();
+ const priceValue = Price.value.trim();
+  const descValue = Desciption.value.trim();
+const imageValue = Image.value.trim();
+const dropValue = Drop.value.trim()
+if(nameValue === ''){
+setError(Name, 'Name is required');
+}else{
+setSuccess(Name)
+}
+if(statusValue === ''){
+setError(Status, 'Status is required');
+}else{
+setSuccess(Status)
+}
+
+/*if(quantityValue === ''){
+setError(Quantity, 'quantity is required');
+}else if(!isValidQuantity(quantityValue)){
+  setError(Quantity,'Invalid quantity')
+}else if(quantityValue<0){
+  setError(Quantity,'quantity cannot be negative')
+}else{setSuccess(quantityValue)
+}*/
+
+
+if(priceValue === ''){
+setError(Price, 'Price is required');
+}else if(!isValidPrice(priceValue)){
+  setError(Price,'Invalid price')
+}else if(parseFloat(priceValue)<0){
+  setError(Price,'Price cannot be negative')
+}else{setSuccess(Price)
+}
+
+if(descValue === ''){
+setError(Desciption, 'Description is required');
+}else{
+setSuccess(Desciption)
+}
+
+const files = Image.files;
+
+if(files.length === 0){
+setError(Image, 'File is required');
+}else if(files.length>3){
+  setError(Image,'Please select up to 3 files')
+}else{setSuccess(Image)
+}
+
+if(dropValue === ''){
+setError(Drop, 'Please select an option');
+}else{
+setSuccess(Drop)
+}
+
+const allInputsValid = document.querySelectorAll('.success').length === 6; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+};
+
+
+
+</script>

@@ -1,0 +1,167 @@
+ <!--<section class="container-fluid" >
+   {{#if err}}
+    <div class="validate-alert bg-danger rounded-1 my-3 d-flex align-items-center justify-content-center" style="height: 2.4rem;">
+        
+            <p class="text-white m-0 p-2">{{message}}</p>
+    
+    </div>    
+    {{/if}}
+    <div class="d-flex justify-content-center align-items-center" style="height: 650px;">
+       <form action="/login" method="post"  class="  p-2  width">
+        <h2 class="mb-3">Login</h2>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+  </div>
+ <div class="mb-3"> <a href="/forgot">Forgot Password?</a></div>
+  <button type="submit" class="btn btn-primary mb-3">Sign in</button> 
+  <div class="mb-3"> <a href="/signup">New Customer? Sign up for an account</a></div>
+</form>
+    </div>
+ </section>-->
+ <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed" style=" background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/singleberry.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  ">
+ 
+    <div
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      <div class="d-flex align-items-center justify-content-center w-100">
+        <div class="row justify-content-center w-100">
+          <div class="col-md-8 col-lg-6 col-xxl-3">
+            <div class="card mb-0" style="background: linear-gradient(to bottom, rgba(20, 219, 20, 1), rgba(255, 255, 255, 1));">
+              <div class="card-body">
+                <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100 text-decoration-none" >
+                 <!-- <img src="images/" width="180" alt="">-->
+                {{#if otpmsg}}
+                  
+                      <strong class="text-success text-center"> {{otpmsg}}</strong> 
+                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+               
+                    {{/if}}
+                </a>
+                 
+                <h3 class="text-center mb-3 "> Login</h3>
+                  {{#if message}}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="">
+                      <strong> {{message}}</strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{/if}}
+                     {{#if block}}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="">
+                      <strong> {{block}}</strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{/if}}
+                    {{#if message1}}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" style="">
+                      <strong> {{message1}}</strong> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {{/if}}
+                   
+                <form action="/" method="post" id="form1" >
+                  <div class="mb-3 input-control1">
+                    <label for="exampleInputEmail1 " class="form-label">Username</label>
+                    <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" name="email">
+                    <div class="error text-danger"></div>
+                  </div>
+                  <div class="mb-4 input-control1">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="exampleInputPassword2" name="password">
+                    <div class="error text-danger"></div>
+                  </div>
+                  
+                  <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="form-check">
+                      <input class="form-check-input primary" type="checkbox" value="" id="flexCheckChecked" checked>
+                      <label class="form-check-label text-dark" for="flexCheckChecked">
+                        Remeber this Device
+                      </label>
+                    </div>
+                    <a class="text-secondary fw-bold" href="/forgot">Forgot Password ?</a>
+                  </div>
+                  
+               <button type="submit" class=" btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Sign In</button>
+           
+                  <div class="d-flex align-items-center justify-content-center">
+                    <p class="fs-5 mb-0 ">New to BetterBuy?</p>
+                    <a class="text-secondary fw-bold ms-2" href="/signup">Create an account</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const form1 = document.getElementById('form1');
+     const Email = document.getElementById('exampleInputEmail2')
+   const Password = document.getElementById('exampleInputPassword2')
+
+  form1.addEventListener('submit',e=>{
+e.preventDefault();
+validateInputs();
+});
+
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const isValidEmail = email => {
+ const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+const validateInputs=()=>{
+ const emailValue = Email.value.trim();
+   const passwprdValue = Password.value.trim();
+
+if(emailValue === ''){
+setError(Email,'Email is required');
+}else if(!isValidEmail(emailValue)){
+setError(Email,'Provide a valid email address');
+}else{
+setSuccess(Email)
+}
+
+if(passwprdValue === ''){
+setError(Password,'Password is required');
+}else if(passwprdValue.length < 6){
+setError(Password,'password must be at least 6 character.')
+}else{
+setSuccess(Password)
+}
+
+ // Check if there are no errors before submitting the form
+ const allInputsValid = document.querySelectorAll('.success').length === 2; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form1.submit(); // Manually submit the form
+ }
+};
+
+
+  </script>
