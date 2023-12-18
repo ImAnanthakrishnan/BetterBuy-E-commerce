@@ -1,4 +1,7 @@
 const User = require('../model/userModel');
+const Product = require('../model/productModel');
+const Order = require('../model/ordersModel');
+
 const bcrypt = require('bcrypt')
 const loadLogin = async(req,res)=>{
     try{
@@ -40,8 +43,13 @@ const verifyLogin = async(req,res)=>{
 const loadDashBoard = async(req,res)=>{
     try{
         let log = req.session.admin_id;
+        const productCount = await Product.find().count().lean();
+        const purchaseCount = await Order.find({status:'Order Placed'}).count().lean();
+        const salesCount = await Order.find({status:'Delivered'}).count().lean();
+        const inventoryCount = await Product.find({quantity:0}).count().lean();
+      
         const adminData = await User.findOne({_id:log});
-        res.render('admin/index',{style:'admin.css',admin:true,adminData})
+        res.render('admin/index',{style:'admin.css',admin:true,adminData,productCount,purchaseCount,salesCount,inventoryCount});
     }
     catch(err){
         console.log(err.message)
