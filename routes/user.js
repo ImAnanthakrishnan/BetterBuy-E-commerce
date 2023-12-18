@@ -21,29 +21,7 @@ router.post('/',userController.verifyLogin,blocked.checkBlocked)
 router.get('/signup',auth.isLogout,userController.loadSignup);
 
 //const urlencoded = express.urlencoded({extended:false});
-router.post('/signup',userController.insertUser);/*urlencoded,[
-    check('fname','This username must be 3+ character long')
-    .exists()
-    .isLength({min:3}),
-    
-    check('email','Email is not valid')
-    .isEmail()
-    .normalizeEmail()
-  ,
-  check('phone')
-  .isNumeric().withMessage('Phone number must be a number')
-  .isLength({ min: 10, max: 15 }).withMessage('Phone number must be between 10 and 15 digits'),
-    check('password','Password must be at least 6 character long')
-    .isLength({min:6})
-    .notEmpty()
-    ,
-],(req,res,next)=>{
-    const errors=validationResult(req)
-     
-    if(!errors.isEmpty()){
-        const alert = errors.array()
-        res.render('user/signup',{style:'style.css',user:true,alert})
-    }else next()},*/
+router.post('/signup',userController.insertUser);
 
 router.get('/verification',auth.isLogout,userController.loadVerification);
 router.post('/verify-otp',auth.isLogout,userController.verifyOtp)
@@ -57,14 +35,14 @@ router.post('/forgot-password',userController.resetPassword)
 
 
 
-router.get('/home',auth.isLogin,homeController.loadHome)
+router.get('/home',homeController.loadHome)
 
-router.get('/grocery',auth.isLogin,groceryController.loadGrocery)
+router.get('/grocery',groceryController.loadGrocery)
 
-router.get('/all',auth.isLogin,productsController.loadAllProducts);
+router.get('/all',productsController.loadAllProducts);
 router.get('/vegetables',auth.isLogin,productsController.loadVegetables);
 router.get('/fruits',auth.isLogin,productsController.loadFruits);
-router.get('/single-product',auth.isLogin,productsController.loadSingleProduct);
+router.get('/single-product',productsController.loadSingleProduct);
 
 /*user-profile*/
 router.get('/general',auth.isLogin,accountsController.loadGeneral);
@@ -84,8 +62,8 @@ router.post('/resend-otp1',accountsController.resendOtp)
 
 //cart
 router.get('/cart',auth.isLogin,cartController.loadCart);
-router.post('/add-cart',auth.isLogin,upload.none(),cartController.add_to_cart);
-router.post('/add-cart1',auth.isLogin,upload.none(),cartController.add_to_cart1);
+router.post('/add-cart',upload.none(),cartController.add_to_cart);
+router.post('/add-cart1',upload.none(),cartController.add_to_cart1);
 router.post('/update-cart',auth.isLogin,cartController.updateCart);
 router.patch('/delete-product',cartController.deleteProduct);
 

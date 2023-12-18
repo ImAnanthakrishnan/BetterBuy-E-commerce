@@ -89,11 +89,12 @@
       if (response.ok) {
                 const result = await response.json();
                 //alert(result.message);
-                showDynamicModal(result.message);
+                
                 const orderStaus = 'Cancelled';
                 linkElement.innerHTML = `<button class="btn btn-secondary" disabled>${orderStaus}</button>`;
                   event.preventDefault();
                   window.location.reload();
+                  showDynamicModal(result.message);
                
             } else {
                 console.log('Failed to change status');
@@ -177,11 +178,12 @@ closeModal();
       if (response.ok) {
                 const result = await response.json();
                 //alert(result.message);
-                showDynamicModal(result.message);
+                
                 const orderStaus = 'Return';
                 linkElement.innerHTML = `<button class="btn btn-secondary" disabled>${orderStaus}</button>`;
                   event.preventDefault();
                   window.location.reload();
+                  showDynamicModal(result.message);
                 // Optionally, update the UI as needed without a page refresh
             } else {
                 console.log('Failed to change status');

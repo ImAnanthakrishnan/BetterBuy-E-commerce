@@ -23,6 +23,7 @@ const loadCart = async(req,res)=>{
 const add_to_cart = async(req,res)=>{
     try{
     
+        if(req.session.user_id){
 
         const existingCart = await Cart.findOne({userId:req.body.userId});
 
@@ -126,6 +127,17 @@ const add_to_cart = async(req,res)=>{
         updatedCart
     }
     res.status(200).json(response)
+}else{
+    console.log('sdfdhs')
+   //  res.redirect('/');
+  
+    const response = {
+       error:`Please login <a href="/" class="">Login</a>`
+    }
+ return res.status(400).json(response);
+
+
+}
     }
     catch(err){
         console.log(err.message);
@@ -136,7 +148,7 @@ const add_to_cart = async(req,res)=>{
 
 const add_to_cart1 = async(req,res)=>{
     try{
-      
+      if(req.session.user_id){
         const {userId,productId,price,quantity} = req.body;
         const existingCart = await Cart.findOne({userId:userId});
      
@@ -258,6 +270,12 @@ const add_to_cart1 = async(req,res)=>{
                 updatedCart
             }
             res.status(200).json(response);
+        }else{
+            const response = {
+                error:`Please login <a href="/" class="">Login</a>`
+             }
+          return res.status(400).json(response);
+        }
     }
     catch(err){
         console.log(err.message);

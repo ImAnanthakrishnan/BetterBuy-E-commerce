@@ -146,7 +146,7 @@ color: orange;}
 }
 
 .product .card-body{
-    border:1px dashed rgb(175,172,172)
+   /* border:1px dashed rgb(175,172,172)*/
 }
 
 .head1{
@@ -206,6 +206,7 @@ color: orange;}
     background-color:#fff5ee;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease !important;
+    border-radius: 25px;
   }
 
   .pro-card .card:hover {
@@ -213,7 +214,7 @@ color: orange;}
   }
 
   .pro-card .card-body {
-    border: 1px solid rgb(175, 172, 172);
+   /* border: 1px solid rgb(175, 172, 172);*/
     padding: 1rem !important;
   }
 

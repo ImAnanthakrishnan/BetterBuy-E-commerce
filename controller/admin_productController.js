@@ -43,7 +43,7 @@ const addProduct = async(req,res)=>{
                 const { width, height } = imageInfo;
                 await sharp('./public/images/' + image)
                 .extract({left:0,top:0,width:Math.min(width,300),height:Math.min(height,300)})
-                .flatten({ background: { r: 255, g: 255, b: 255, alpha: 1 } })
+                .flatten({ background: { r: 255, g: 245, b: 238, alpha: 1 } })
                 .jpeg()
                 .toFile(outputImage);
 
@@ -115,10 +115,34 @@ const updateProduct = async(req,res)=>{
       
 
         product.images = images.concat(newImages);
+  console.log(product.images)
+        const cropperImage = await Promise.all(
+            product.images.map(async(image)=>{
+                try{
+                const outputImage = `./public/images/cropped_${image}`;
+                console.log(outputImage)
+                const imageInfo = await sharp('./public/images/' + image).metadata();
+                const { width, height } = imageInfo;
+                await sharp('./public/images/' + image)
+                .extract({left:0,top:0,width:Math.min(width,300),height:Math.min(height,300)})
+                .flatten({ background: { r: 255, g: 245, b: 238, alpha: 1 } })
+                .jpeg()
+                .toFile(outputImage);
+
+                return `cropped_${image}`;
+            }catch(error){
+                console.log('Error during image extraction:',error.message);
+                throw error;
+            }
+            })
+        );
+
        
-        const updateProduct = await Product.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,status:req.body.status,price:req.body.price,description:req.body.description,images:product.images,category_id:req.body.category_id}});
-      
+        const updateProduct = await Product.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,status:req.body.status,price:req.body.price,description:req.body.description,images:cropperImage,category_id:req.body.category_id}});
+       if(updateProduct){
         res.redirect('/admin/product');
+       }
+        
     }   
     catch(err){
         console.log(err.message)
