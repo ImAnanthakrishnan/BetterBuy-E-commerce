@@ -29,11 +29,32 @@ const orderSchema = mongoose.Schema({
         type:Number,
         required:true
     },
-    address:{
-        type:mongoose.Types.ObjectId,
-        ref:'Address',
-        required:true
-    },
+    address:[{
+        address:{
+            type:String,
+            required:true
+        },
+        district:{
+            type:String,
+            required:true
+        },
+        city:{
+            type:String,
+            required:true
+        },
+        pincode:{
+            type:String,
+            required:true
+        },
+        state:{
+            type:String,
+            required:true
+        },
+        country:{
+            type:String,
+            required:true
+        }
+    }],
     paymentMethod:{
         type:String,
         required:true
