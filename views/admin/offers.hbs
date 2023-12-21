@@ -1,0 +1,61 @@
+<div class=" main-container" style="">
+  <a href="/admin/add-offers" class="text-decoration-none"><button class="btnc ">ADD OFFERS</button></a>
+  <table class="table my-3 table-hover" id="userTable">
+    {{#if offer.length}}
+      <thead>
+         <tr>
+     
+      <th scope="col">No</th>
+      <th scope="col">Category</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Expiry</th>
+
+    </tr>
+      </thead>
+       <tbody>
+        {{#each offer as |value index|}}
+        <tr>
+          <td scope="row">{{index}}</td>
+          <td>{{value.category}}</td>
+          <td>{{value.discount}}</td>
+          <td>{{value.expiry}}</td>
+        </tr>
+        {{/each}}
+       </tbody>
+       {{else}}
+       <p>No offers available</p>
+       {{/if}}
+  </table>
+</div>
+
+
+<script>
+
+
+
+ /* document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+      title: 'Dropdown and Input',
+      html:
+        '<select id="dropdown" class="swal2-input">' +
+          '<option value="option1">Option 1</option>' +
+          '<option value="option2">Option 2</option>' +
+          '<option value="option3">Option 3</option>' +
+        '</select>' +
+        '<input id="inputField" class="swal2-input" placeholder="Enter something">',
+      focusConfirm: false,
+      preConfirm: () => {
+        const dropdownValue = document.getElementById('dropdown').value;
+        const inputValue = document.getElementById('inputField').value;
+        return { dropdownValue, inputValue };
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const { dropdownValue, inputValue } = result.value;
+        // Do something with the values
+        console.log('Dropdown Value:', dropdownValue);
+        console.log('Input Value:', inputValue);
+      }
+    });
+  });*/
+</script>
