@@ -1,0 +1,63 @@
+<div class="" style="">
+  <h1 class="text-center mb-5">OrderDetails</h1>
+
+
+<table class="table my-3 " id="userTable">
+  
+  <thead>
+    <tr>
+     
+      <th scope="col">No</th>
+      <th scope="col">Image1</th>
+      <th scope="col">Name</th>
+      <th scope="col">Quantity</th>
+          <th scope="col">Total Price</th>
+          <th scope="col">Address</th>
+          <th scope="col">Full name</th>
+          <th scope="col">Phone</th>
+
+          <th scope="col">paymentMethod</th>
+         
+          <th scope="col">Date</th>
+        
+      
+    </tr>
+  </thead>
+  <tbody>
+
+     {{#each orderData as |value index|}}
+       
+        <tr>
+          <td scope="row">{{index}}</td>
+         
+          <td>{{#each value.product}}<img src="/images/{{this.productId.images.[0]}}">{{/each}}</td>
+          <td>{{#each value.product}}{{this.productId.name}},{{/each}}</td>
+      
+          <td>{{value.quantity}}</td>
+          <td>{{value.totalPrice}}/-</td>
+          {{#each value.address}}
+          <td>{{this.address}}<br>
+         Pincode : {{this.pincode}}<br>
+         District : {{this.district}}<br>
+         City : {{this.city}}
+          </td>
+          {{/each}}
+        <td>{{value.fullname}}</td>
+        <td>{{value.phone}}</td>
+         <td>{{value.paymentMethod}}</td>
+         <!-- <td>{{value.status}}</td>-->
+ 
+           <td>{{value.createdAt}}</td>
+      <script>console.log('{{date}}')</script>
+       
+         
+          
+    
+        </tr>
+      
+         {{/each}}
+       
+  </tbody>
+
+</table>
+</div>
