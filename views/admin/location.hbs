@@ -1,0 +1,18 @@
+<section class="main-container">
+      <a href="/admin/add-location" class="text-decoration-none"><button class="btnc ">ADD LOCATION </button></a>
+    <div class="card-group mt-3">
+        {{#each location}}
+<div class="card me-2" style="width: 9rem;">
+  <div class="card-body">
+    <h5 class="card-title">District : {{this.district}}</h5>
+        <p class="card-text">Pincodes:
+        {{#each this.pincode}}
+          {{this}}&nbsp;{{! Add a space after each pincode for better readability }}
+        {{/each}}
+      </p>
+    <a href="/admin/edit-location?id={{this._id}}" class="btn btn-primary">Edit</a>
+  </div>
+</div>
+{{/each}}
+</div>
+</section>

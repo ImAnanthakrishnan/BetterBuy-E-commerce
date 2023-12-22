@@ -1,0 +1,35 @@
+<section class="main-container">
+  
+     <h2 class="text-center" style="font-weight:700 ;">Edit Coupons</h2>
+  
+    
+              {{#if message}}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong> {{message}}</strong> 
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}}
+     <form action="/admin/edit-location" method="post" id="form"  class="  p-2  width border border-5 border-secondary" >
+        <h2 class="mb-3">Edit Location</h2>
+        <div class="mb-3">
+    <label for="exampleInputFirstname" class="form-label">District</label>
+    <input type="text" class="form-control" id="exampleInputFirstname"  name="district" value="{{location.district}}">
+     <div class="error text-danger"></div>
+  </div>
+       <div class="mb-3">
+    <label for="exampleInputFirstname1" class="form-label">Pincode (Separate with commas)</label>
+        <input class="form-control" id="exampleInputFirstname1" name="pincode" value="{{location.pincode}}">
+     <div class="error text-danger"></div>
+  </div>
+          <div class="mb-3">
+ 
+    <input type="hidden" class="form-control" id="exampleInputFirstname"  name="id" value="{{location._id}}">
+  
+  </div>
+  
+   <button type="submit" class="btn btn-primary">ADD</button> <span>or <a href="/admin/location">return to location</a></span>
+  </form>
+        </div>
+    </div>
+
+</section>
