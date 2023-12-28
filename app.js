@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const userRoute = require('./routes/user');
 const adminRoute = require('./routes/admin')
 const {errorHandler,notFound}=require('./middleware/errorHandler');
@@ -44,45 +45,21 @@ app.engine(
       allowProtoMethodsByDefault: true,
     })
   );
-//app.set('view engine','handlebars');
 
-/*const hbs = expbs.create({
-  extname: 'hbs',
-  defaultLayout: 'layout',
-  layoutsDir: __dirname + '/views/layout/',
-  partialsDir: __dirname + '/views/partials/',
-  // Disable prototype access check
-  allowProtoMethodsByDefault: true,
-})
-app.engine('handlebars',hbs.engine);
-app.set('view engine','handlebars')*/
 
 //mongoose
-mongoose.connect("mongodb://127.0.0.1:27017/BetterBuy");
+mongoose.connect(process.env.MONGODB_URL);
 //session
 app.use(session({
-  secret:'secretKey',
+  secret:process.env.SECRET,
   resave:false,//session to save
   saveUninitialized:true,//session to to uninitialised to save and store
   //cookie:{maxAge:600000}//00
 }));
-/*const userSession = session({
-  secret: 'userSecretKey',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 600000 },
-});
-
-const adminSession = session({
-  secret: 'adminSecretKey',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 600000 },
-});*/
+//app.use(cors());
 
 
-//app.use(userSession);
-//app.use(adminSession)
+
 
 app.use((req,res,next)=>{
   res.header('Cache-Control','no-cache,private,no-Store,must-revalidate,max-scale=0,post-check=0,pre-check=0');
@@ -95,8 +72,8 @@ app.use(flash());
 app.use('/',userRoute);
 app.use('/admin',adminRoute);
 //error handlermiddleware
-//app.use(notFound);
-//app.use(errorHandler);
+app.use(notFound);
+app.use(errorHandler);
 
 const port = process.env.PORT;
 app.listen(port || 8000,()=>{
