@@ -27,6 +27,13 @@ const userSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
+    referalCode:{
+        type:String,
+        required:true
+    },
+    refferedCode:{
+        type:String
+    },
     is_verified:{
         type:Number,
         default:0
@@ -38,7 +45,12 @@ const userSchema = new mongoose.Schema({
     is_blocked:{
         type:Boolean,
         default:false
+    },
+    is_reffered:{
+        type:Boolean,
+        default:false
     }
+
 });
 
 const User = mongoose.model('User',userSchema)

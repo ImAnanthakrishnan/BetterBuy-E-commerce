@@ -35,11 +35,19 @@ const productSchema = mongoose.Schema({
         ref:Category,
         required:true
     },
+    earlierPrice:{
+      type:Number,
+      required:true
+    },
     is_disabled:{
         type:Boolean,
        default:false
     },
     is_cancelled:{
+        type:Boolean,
+        default:false
+    }
+    ,is_offer:{
         type:Boolean,
         default:false
     }
