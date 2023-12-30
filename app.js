@@ -20,9 +20,9 @@ app.set('views',path.join(__dirname,'views'));
 app.set('view engine','hbs')
 
 //loggermiddleware
-if(process.env.NODE_ENV === 'development'){
+//if(process.env.NODE_ENV === 'development'){
     app.use(logger('dev'));
-}
+//}
 
 //bodyparsing
 app.use(express.json());
