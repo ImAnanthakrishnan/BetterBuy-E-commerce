@@ -48,13 +48,38 @@ app.engine(
 
 
 //mongoose
+
 mongoose.connect(process.env.MONGODB_URL);
+
+const db = mongoose.connection;
+
+db.on('error', (error) => {
+  console.error('MongoDB connection error:', error);
+});
+
+db.once('open', () => {
+  console.log('Connected to MongoDB!');
+});
+
+db.on('disconnected', () => {
+  console.log('MongoDB disconnected');
+});
+
+// Close the Mongoose connection if the Node process is terminated
+process.on('SIGINT', () => {
+  mongoose.connection.close(() => {
+    console.log('MongoDB connection closed through app termination');
+    process.exit(0);
+  });
+});
+
 //session
+
 app.use(session({
   secret:process.env.SECRET,
   resave:false,//session to save
   saveUninitialized:true,//session to to uninitialised to save and store
-  //cookie:{maxAge:600000}//00
+  cookie:{maxAge:7200000}
 }));
 //app.use(cors());
 
@@ -65,12 +90,14 @@ app.use((req,res,next)=>{
   res.header('Cache-Control','no-cache,private,no-Store,must-revalidate,max-scale=0,post-check=0,pre-check=0');
   next();
 });
+
 //flash
 app.use(flash());
 
 //user route
 app.use('/',userRoute);
 app.use('/admin',adminRoute);
+
 //error handlermiddleware
 app.use(notFound);
 app.use(errorHandler);
