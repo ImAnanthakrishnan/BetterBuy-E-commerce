@@ -330,3 +330,53 @@ td img{
 .input-control1.error input {
     border-color: #ff3860;
 }
+
+.date-filter-container {
+    display: flex;
+    gap: 10px; /* Adjust the gap between the input fields as needed */
+}
+
+.date-filter-container label {
+    flex: 1; /* Distribute available space equally between labels */
+}
+
+.date-filter-container input {
+    flex: 2; /* Distribute available space equally between input fields */
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+   
+  }
+  
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    z-index: 10;
+  }
+
+  .pagination a,
+  .pagination span {
+    padding: 10px;
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+
+  .pagination a:hover {
+    background-color: #f2f2f2;
+  }
+
+  .pagination span {
+    background-color: #4CAF50;
+    color: white;
+    cursor: default;
+  }
