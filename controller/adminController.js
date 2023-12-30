@@ -44,7 +44,7 @@ const loadDashBoard = async(req,res)=>{
     try{
         let log = req.session.admin_id;
         const productCount = await Product.find().count().lean();
-        const purchaseCount = await Order.find({status:'Order Placed'}).count().lean();
+        const purchaseCount = await Order.find().count().lean();
         const salesCount = await Order.find({status:'Delivered'}).count().lean();
         const inventoryCount = await Product.find({quantity:0}).count().lean();
       

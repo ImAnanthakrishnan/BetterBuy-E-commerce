@@ -3,6 +3,9 @@ const Address = require('../model/addressModel');
 const Product = require('../model/productModel');
 const Order = require('../model/ordersModel');
 const Wallet = require('../model/walletModel');
+const User = require('../model/userModel');
+const mongoose =  require('mongoose');
+
 
 const Razorpay = require('razorpay');
 const {RAZORPAY_ID_KEY , RAZORPAY_SECRET_KEY} = process.env;
@@ -76,7 +79,13 @@ const generateOrderId = () => {
 
 const placeOrder = async(req,res)=>{
     try{
-        console.log(req.body.productId)
+        console.log(req.body.proName)
+       console.log(req.body.address);
+       console.log(req.body.district);
+       console.log(req.body.city);
+       console.log(req.body.pincode);
+       console.log(req.body.state);
+       console.log(req.body.country);
         const log = req.session.user_id;
         const id = req.session.user_id;
         const cartData = await Cart.find({userId:id}).populate('product.productId');
@@ -95,6 +104,10 @@ const placeOrder = async(req,res)=>{
       ? req.body.price.map(price => parseFloat(price))
       : [parseFloat(req.body.price)];
 
+      const nameArray = Array.isArray(req.body.proName)
+      ? req.body.proName.map(name => name)
+      : [req.body.proName];
+
        /*const productsArray = req.body.productId.map((productId, index) => ({
         productId: productId,
         quantity: quantityArray[index],
@@ -104,8 +117,10 @@ const placeOrder = async(req,res)=>{
     const productsArray = Array.isArray(req.body.productId)
   ? req.body.productId.map((productId, index) => ({
       productId: productId,
+      name:nameArray[index],
       quantity: quantityArray[index],
       price: priceArray[index],
+      name:nameArray[index]
     }))
   : [
       {
@@ -122,7 +137,14 @@ const placeOrder = async(req,res)=>{
         product:productsArray,
         fullname:req.body.fname,
         phone:req.body.phone,
-        address:req.body.addressId,
+        address:[{
+            address:req.body.address,
+            district:req.body.district,
+            city:req.body.city,
+            pincode:req.body.pincode,
+            state:req.body.state,
+            country:req.body.country
+        }],
         paymentMethod: req.body.payment,
         quantity:totalQuantity,
         totalPrice:totalPrice
@@ -243,8 +265,9 @@ const placeOrder = async(req,res)=>{
             const cartTotal = cartData.find(total=>total)
            console.log(wallet.totalPrice);
            console.log(cartTotal.totalPrice);
-
+           console.log('wal-',wallet.totalPrice);
             if(cartTotal.totalPrice<=wallet.totalPrice){
+                
                 const updatedTotal = wallet.totalPrice - cartTotal.totalPrice;
                  console.log(updatedTotal);
 
@@ -374,6 +397,60 @@ const placeOrder = async(req,res)=>{
                {
                 $pull:{product:{productId:{$in:Array.isArray(productId) ? productId:[productId]}}},
                });
+
+               const user = await User.findById(req.session.user_id);
+               const count =await Wallet.find({userId:req.session.user_id}).count(); 
+               if(user.refferedCode && user.is_reffered === false){
+                
+                if(count===0){
+                    const wallet = new Wallet({
+                        userId:req.session.user_id,
+                       totalPrice:50
+                    });
+                    const res= await wallet.save();
+
+                    await User.findByIdAndUpdate(req.session.user_id,{is_reffered:true});
+                }
+
+               }
+
+               const referdUser = await User.findOne({referalCode:user.refferedCode});
+               if(referdUser && user.is_reffered === false){
+
+                const user1 = await User.findOne({referalCode:user.refferedCode});
+   
+                const count1 = await Wallet.find({userId:user1._id})
+ 
+
+                if(count1.length === 0 ){
+         
+                    const wallet = new Wallet({
+                        userId:referdUser._id,
+                       totalPrice:100
+                    });
+                    const res= await wallet.save();
+                  
+                   }else if(count1.length>0){
+                     
+                        const wallet1 = await Wallet.findOne({userId:referdUser._id});
+                        if(wallet1){
+                           
+                            await Wallet.findOneAndUpdate({userId:referdUser._id},{$inc:{totalPrice:100}},{new:true});
+                         
+                        }else{
+                           
+                            const wallet = new Wallet({
+                                userId:referdUser._id,
+                                totalPrice:100
+                            });
+                            const res= await wallet.save();
+                      
+                        }
+                   }
+
+
+               }
+              
            }
         }
     }
@@ -390,6 +467,7 @@ const placeOrder = async(req,res)=>{
 
 const razorpayVerify = async(req,res)=>{
     try{
+        console.log(req.body.proName);
         console.log(req.body.productId)
         const log = req.session.user_id;
         const id = req.session.user_id;
@@ -410,12 +488,17 @@ const razorpayVerify = async(req,res)=>{
        ? req.body.price.map(price => parseFloat(price))
        : [parseFloat(req.body.price)];
 
+       const nameArray = Array.isArray(req.body.proName)
+       ? req.body.proName.map(name => name)
+       : [req.body.proName];
+
    
        const productsArray = Array.isArray(req.body.productId)
        ? req.body.productId.map((productId, index) => ({
            productId: productId,
            quantity: quantityArray[index],
            price: priceArray[index],
+           name:nameArray[index]
          }))
        : [
            {
@@ -431,7 +514,14 @@ const razorpayVerify = async(req,res)=>{
           product:productsArray,
           fullname:req.body.fname,
           phone:req.body.phone,
-          address:req.body.addressId,
+          address:[{
+            address:req.body.address,
+            district:req.body.district,
+            city:req.body.city,
+            pincode:req.body.pincode,
+            state:req.body.state,
+            country:req.body.country
+        }],
           paymentMethod: req.body.payment,
           quantity:totalQuantity,
           totalPrice:totalPrice
@@ -455,6 +545,61 @@ const razorpayVerify = async(req,res)=>{
                {
                 $pull:{product:{productId:{$in:Array.isArray(productId) ? productId:[productId]}}},
                });
+
+               const user = await User.findById(req.session.user_id);
+               const count =await Wallet.find({userId:req.session.user_id}).count(); 
+               if(user.refferedCode && user.is_reffered === false){
+                
+                if(count===0){
+                    const wallet = new Wallet({
+                        userId:req.session.user_id,
+                       totalPrice:50
+                    });
+                    const res= await wallet.save();
+
+                    await User.findByIdAndUpdate(req.session.user_id,{is_reffered:true});
+                }
+
+               }
+
+               const referdUser = await User.findOne({referalCode:user.refferedCode});
+               if(referdUser && user.is_reffered === false){
+                const user1 = await User.findOne({referalCode:user.refferedCode});
+   
+                const count1 = await Wallet.find({userId:user1._id})
+ 
+                console.log('count=',count1.length)
+                if(count1.length === 0 ){
+         
+                    const wallet = new Wallet({
+                        userId:referdUser._id,
+                       totalPrice:100
+                    });
+                    const res= await wallet.save();
+                  
+                   }else if(count1.length>0){
+                     
+                        const wallet1 = await Wallet.findOne({userId:referdUser._id});
+                        if(wallet1){
+                           
+                            await Wallet.findOneAndUpdate({userId:referdUser._id},{$inc:{totalPrice:100}},{new:true});
+                         
+                        }else{
+                           
+                            const wallet = new Wallet({
+                                userId:referdUser._id,
+                                totalPrice:100
+                            });
+                            const res= await wallet.save();
+                      
+                        }
+                   }
+
+
+               }
+
+
+
            }else{
             //throw new Error('failed payment')
             const response = {errorMessages:'failed Payment'};
@@ -494,19 +639,44 @@ const orderDetailsLoad = async(req,res)=>{
     try{
         const log = req.session.user_id;
         const id = req.session.user_id;
-        const orderDatas = await Order.find({userId:id}).populate('product.productId').populate('address').lean();
+       // const orderDatas = await Order.find({userId:id}).populate('product.productId').populate('address').lean();  
+        var page =1;
+        if(req.query.page){
+            page=req.query.page;
+        }
+ 
+    const limit = 10; 
+        const orderDatas = await Order.find({userId:id})
+        .populate('product.productId')
+        .populate('address')  
+        .sort({ createdAt: -1 }) 
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
+        .lean()
+        .exec();
+        const count = await Order.find({userId:id}).countDocuments();
+        const totalPages = Math.ceil(count/limit);
+        const pages = [];
+        for(let i = 1 ; i <= totalPages ; i++){
+            pages.push({
+                page:i,
+                isCurrentPage:i===page,
+            });
+        }
         //const createdAtArray = orderDatas.map(order => order.createdAt);
-       
+        orderDatas.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         const orderData = orderDatas.map(order => {
             const isDelivered = order.status === 'Delivered';
+            const isShipped = order.status === 'Out For Delivery';
             return {
                 ...order,
                 createdAt: new Date(order.createdAt).toLocaleDateString(),
-                isDelivered
+                isDelivered,
+                isShipped
             };
         });
           
-        res.render('user/order-details',{title:'OrderDetails',user:true,style:'style.css',orderData,log})
+        res.render('user/order-details',{title:'OrderDetails',user:true,style:'style.css',orderData,log,totalPages,currentPage:page,pages})
     }
     catch(err){
         console.log(err.message);
@@ -702,7 +872,16 @@ const viewOrder = async(req,res)=>{
         const log = req.session.user_id;
         const id = req.query.id;
         const order = await Order.findOne({_id:id}).populate('product.productId').populate('address').lean();
-        console.log(order)
+        const options = {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true 
+        };
+        order.createdAt = new Date(order.createdAt).toLocaleString(undefined,options);
         res.render('user/view-order',{title:'view order',user:true,style:'style.css',order,log});
     }
     catch(err){

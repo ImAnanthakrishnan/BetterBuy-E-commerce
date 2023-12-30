@@ -5,13 +5,23 @@ const Product = require('../model/productModel');
 const loadInventory = async(req,res)=>{
     try{
         const product = await Product.find();
-        const productData = await Product.find().populate('category_id').lean();
+        const productDatas = await Product.find().populate('category_id').lean();
         const proToUpdate = product.filter(product=>product.quantity <= 0);
         
         if(proToUpdate.length>0){
           const proId = proToUpdate.map(product=>product._id);
           console.log(proId);
-          await Product.updateMany({_id:{$in:proId}},{$set:{status:'Unavailable',is_cancelled:true}})
+          await Product.updateMany({_id:{$in:proId}},{$set:{status:'Unavailable',is_cancelled:true}});
+          const productData = productDatas.map(product => {
+            return {
+              ...product,
+              status1: product.status === 'Available'
+            };
+          });
+          productData.sort((a, b) => {
+          
+            return a.status === b.status ? 0 : a.status === 'Unavailable' ? -1 : 1;
+        });
           res.render('admin/inventory',{title:'Inventory',productData,style:'admin.css',admin:true})
         }else{
             res.render('admin/inventory',{title:'Inventory',productData,style:'admin.css',admin:true})

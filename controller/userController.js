@@ -67,6 +67,14 @@ const insertUser = async(req,res)=>{
         const spassword = await securePassword(req.body.password);
         const existEmail = await User.findOne({email:req.body.email});
         const existPhone = await User.findOne({phone:req.body.phone});
+
+        const generateReferalId = () => {
+            const timestampPart = Date.now().toString().slice(-8); 
+            const randomPart = Math.floor(Math.random() * 100000000).toString().slice(0, 2); 
+        
+            return timestampPart + randomPart;
+        };
+
         if(existEmail && !existPhone){
          req.flash('message','Email already exists')
             res.redirect('/signup');
@@ -81,14 +89,16 @@ const insertUser = async(req,res)=>{
             req.flash('message3','Email already exists');
             res.redirect('/signup');
         }
-        
+        const refId = generateReferalId();
         const user = new User({
             fname:req.body.fname,
             lname:req.body.lname,
             email:req.body.email,
             phone:req.body.phone,
             password:spassword,
-            is_admin:0
+            is_admin:0,
+            referalCode:refId,
+            refferedCode:req.body.ref_code
         });
         const userData=await user.save().then((result)=>{
             sendOtpVerification(result,req,res)

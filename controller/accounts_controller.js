@@ -6,6 +6,8 @@ dotenv.config({path:'./config.env'});
 const nodemailer = require('nodemailer');
 //const userController = require('../controller/userController');
 const userOtpVerification = require('../model/userOtpVerification');
+const Location = require('../model/locationModel');
+
 const securePassword = async(password)=>{
     try{
         const passwordHash = await bcrypt.hash(password,10);
@@ -320,7 +322,15 @@ const editAddress = async(req,res)=>{
     try{
         const {addres,addressId,district,pincode,city,state,country,checkout}=req.body;
         if(checkout === 'address'){
-        
+            const location = await Location.findOne({district:district});
+            if(!location){
+                const response = {message:'Product is unavailable in this district'}
+                return res.status(400).json(response);
+             }else{
+                if(!location.pincode.includes(pincode)){
+                    const response = {message:'Product is unavailable in this pincode'}
+                    return res.status(400).json(response);
+                   }else{
             const id = req.session.user_id;
             const address = await Address.findOne({user_id:id});
         
@@ -346,8 +356,8 @@ const editAddress = async(req,res)=>{
                 }
             
             }
-
-
+        }
+        }
         }else{
             const id = req.session.user_id;
             const address = await Address.findOne({user_id:id});
@@ -357,6 +367,15 @@ const editAddress = async(req,res)=>{
             //console.log(updation_address);
             const specificAddress =  updation_address.find(address=>String(address._id) === address_id);
             //console.log(specificAddress)
+            const location = await Location.findOne({district:specificAddress.district});
+            if(!location){
+               req.flash('message',`Can't use this district`)
+                return  res.redirect(`/address-settings?id=${address_id}`);
+             }else{
+                if(!location.pincode.includes(specificAddress.pincode)){
+                    req.flash('message',`Can't use this pincode`)
+                    return  res.redirect(`/address-settings?id=${address_id}`);
+                   }else{
             if(specificAddress){
                 specificAddress.address = req.body.address || specificAddress.address;
                 specificAddress.district = req.body.district || specificAddress.district;
@@ -373,6 +392,8 @@ const editAddress = async(req,res)=>{
                 }
             }
         }
+    }
+}
       
 
     }
@@ -432,6 +453,15 @@ const addAdress = async(req,res)=>{
             return res.redirect('/checkout');
         }else{*/
         if(checkout === 'address'){ 
+         const location = await Location.findOne({district:district})
+         if(!location){
+            const response = {message:'Product is unavailable in this district'}
+            return res.status(400).json(response);
+         }else{
+           if(!location.pincode.includes(pincode)){
+            const response = {message:'Product is unavailable in this pincode'}
+            return res.status(400).json(response);
+           }else{
             const data = await Address.findOne({user_id:req.session.user_id});
             if(data){
                 const addAdress = [...data.address];
@@ -466,6 +496,8 @@ const addAdress = async(req,res)=>{
                     res.status(400).json(response);
                 }
             }
+        
+        
             }else{
                 const address = new Address({
                     user_id:req.session.user_id,
@@ -484,6 +516,9 @@ const addAdress = async(req,res)=>{
                     res.status(200).json(response);
                 }
             }
+         }
+        }
+
         }else{
             const data = await Address.findOne({user_id:req.body.user_id});
             if(data){
@@ -496,7 +531,17 @@ const addAdress = async(req,res)=>{
                    
                 } else {
                     
-                
+                    const location = await Location.findOne({district:req.body.district});
+                    if(!location){
+                        //const response = {message:'Product is unavailable in this district'}
+                        req.flash('message','Product is unavailable in this district')
+                        return res.redirect('/add-address');
+                     }else{
+                       if(!location.pincode.includes(pincode)){
+                        //const response = {message:'Product is unavailable in this pincode'}
+                        req.flash('message','Product is unavailable in this pincode')
+                        return res.redirect('/add-address');
+                       }else{
                 addAdress.push({
                     address:req.body.address,
                     district:req.body.district,
@@ -519,7 +564,24 @@ const addAdress = async(req,res)=>{
                     res.redirect('/add-address');
                 }
             }
+        }
+    }
+
+
             }else{
+
+                const location = await Location.findOne({district:req.body.district});
+                if(!location){
+                    //const response = {message:'Product is unavailable in this district'}
+                    req.flash('message','Product is unavailable in this district')
+                    return res.redirect('/add-address');
+                 }else{
+                   if(!location.pincode.includes(pincode)){
+                    //const response = {message:'Product is unavailable in this pincode'}
+                    req.flash('message','Product is unavailable in this pincode')
+                    return res.redirect('/add-address');
+                   }else{
+
                 const address = new Address({
                     user_id:req.body.user_id,
                     address:[{
@@ -537,6 +599,12 @@ const addAdress = async(req,res)=>{
                     res.redirect('/add-address');
                 }
             }
+        }
+
+
+            }
+//
+            //
         }
  
     //}

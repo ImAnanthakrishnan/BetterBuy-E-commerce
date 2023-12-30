@@ -2,15 +2,40 @@ const Order = require('../model/ordersModel');
 const Wallet = require('../model/walletModel');
 const Product = require('../model/productModel');
 
+const { header } = require('express-validator');
+
 const orderDetails = async(req,res)=>{
     try{
-    const orderDatas = await Order.find().populate('product.productId').populate('address').lean();
+        var page =1;
+        if(req.query.page){
+            page=req.query.page;
+        }
+ 
+    const limit = 10; 
+  //  const orderDatas = await Order.find().limit(limit * 1).skip((page - 1) * limit).populate('product.productId').populate('address').lean().exec();
+  const orderDatas = await Order.find()
+  .populate('product.productId')
+  .populate('address')
+  .sort({ createdAt: -1 }) 
+  .limit(limit * 1)
+  .skip((page - 1) * limit)
+  .lean()
+  .exec();
+    const count = await Order.find().countDocuments();
+    const totalPages = Math.ceil(count/limit);
+    const pages = [];
+    for(let i = 1 ; i <= totalPages ; i++){
+        pages.push({
+            page:i,
+            isCurrentPage:i===page,
+        });
+    }
       /*let cancel = false;
        const cancell = orderData.find(order=>order.status === 'Cancelled'); 
         
         if(cancell) cancel=true;
         console.log(cancel)*/
-
+        orderDatas.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         const orderData = orderDatas.map(order => {
             return {
                 ...order,
@@ -18,7 +43,10 @@ const orderDetails = async(req,res)=>{
             };
         });
 
-        res.render('admin/orders',{title:'OrderDetails',admin:true,style:'admin.css',orderData})
+
+
+
+        res.render('admin/orders',{title:'OrderDetails',admin:true,style:'admin.css',orderData,totalPages,currentPage:page,pages});
     }
     
     catch(err){
@@ -199,5 +227,7 @@ const refund = async(req,res)=>{
         res.status(500).json({error:'Internal server error'});
     }
 }
+
+
 
 module.exports = {orderDetails,changeStatus,deleteOrder,refund};

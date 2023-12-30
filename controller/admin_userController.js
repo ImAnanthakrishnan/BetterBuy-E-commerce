@@ -8,6 +8,14 @@ const loadUser = async(req,res)=>{
             search = req.query.search
         }
 
+        var page = 1;
+        if(req.query.page){
+            page=req.query.page;
+        }
+
+        const limit = 10;
+
+    
         const userData = await User.find({
             is_admin:0,
             $or:[
@@ -16,8 +24,32 @@ const loadUser = async(req,res)=>{
                 {email:{$regex:'.*'+search+'.*',$options:'i'}},
                 {phone:{$regex:'.*'+search+'.*',$options:'i'}}
             ]
-    }).lean()
-        res.render('admin/user',{title:'user_details',userData,admin:true,style:'admin.css',message:req.flash('message')});
+    }).limit(limit * 1)
+    .skip((page - 1) * limit)
+    .lean().exec();
+
+
+    const count = await User.find({
+        is_admin:0,
+        $or:[
+            {fname:{$regex:'.*'+search+'.*',$options:'i'}},
+            {lname:{$regex:'.*'+search+'.*',$options:'i'}},
+            {email:{$regex:'.*'+search+'.*',$options:'i'}},
+            {phone:{$regex:'.*'+search+'.*',$options:'i'}}
+        ]
+}).countDocuments()
+;
+const totalPages = Math.ceil(count/limit);
+const pages = [];
+for(let i = 1 ; i <= totalPages ; i++){
+    pages.push({
+        page:i,
+        isCurrentPage:i===page,
+    });
+}
+console.log(count)
+
+        res.render('admin/user',{title:'user_details',userData,admin:true,style:'admin.css',message:req.flash('message'),totalPages , currentPage:page, pages });
     }
     catch(err){
         console.log(err.message)

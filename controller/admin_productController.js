@@ -2,20 +2,43 @@ const Product = require('../model/productModel');
 const Category = require('../model/categoryModel')
 const sharp = require('sharp');
 
-const loadProduct = async(req,res)=>{
-    try{
-       
-        const productData = await Product.find().populate('category_id').lean()
-       
-        if(productData.status == 'available'){
-            var status=true
-        }
-        res.render('admin/products',{title:'Product',productData,style:'admin.css',admin:true,status})
+  const loadProduct = async (req, res) => {
+    try {
+      const { search } = req.query;
+  
+      let productDatas;
+  
+      if (search) {
+        // Find category matching the search criteria
+        const matchingCategories = await Category.find({
+          category: { $regex: `.*${search}.*`, $options: 'i' },
+        });
+  
+        // Extract category IDs from matchingCategories
+        const categoryIds = matchingCategories.map(category => category._id);
+  
+        // Find products that belong to the matching categories
+        productDatas = await Product.find({
+          category_id: { $in: categoryIds },
+        }).populate('category_id').lean();
+      } else {
+        // If no search criteria, retrieve all products
+        productDatas = await Product.find().populate('category_id').lean();
+      }
+  
+      const productData = productDatas.map(product => {
+        return {
+          ...product,
+          status1: product.status === 'Available',
+        };
+      });
+  
+      res.render('admin/products', { title: 'Product', productData, style: 'admin.css', admin: true });
+    } catch (err) {
+      console.log(err.message);
     }
-    catch(err){
-        console.log(err.message)
-    }
-}
+  };
+  
 
 const loadAddProduct = async(req,res)=>{
     try{
@@ -34,7 +57,7 @@ const addProduct = async(req,res)=>{
     try{
         const arrImages = req.files.map(file => file.filename);
       console.log(arrImages)
-        const cropperImage = await Promise.all(
+       /* const cropperImage = await Promise.all(
             arrImages.map(async(image)=>{
                 try{
                 const outputImage = `./public/images/cropped_${image}`;
@@ -53,7 +76,7 @@ const addProduct = async(req,res)=>{
                 throw error;
             }
             })
-        );
+        );*/
 
        const product =  new Product({
             name:req.body.name,
@@ -61,8 +84,9 @@ const addProduct = async(req,res)=>{
             quantity:req.body.quantity,
             price:req.body.price,
             description:req.body.description,
-            images:cropperImage,
+            images:arrImages,
             category_id:req.body.category_id, 
+            earlierPrice:req.body.price
 
         });
         const product_data = await product.save();
@@ -116,7 +140,7 @@ const updateProduct = async(req,res)=>{
 
         product.images = images.concat(newImages);
   console.log(product.images)
-        const cropperImage = await Promise.all(
+       /* const cropperImage = await Promise.all(
             product.images.map(async(image)=>{
                 try{
                 const outputImage = `./public/images/cropped_${image}`;
@@ -124,7 +148,7 @@ const updateProduct = async(req,res)=>{
                 const imageInfo = await sharp('./public/images/' + image).metadata();
                 const { width, height } = imageInfo;
                 await sharp('./public/images/' + image)
-                .extract({left:0,top:0,width:Math.min(width,300),height:Math.min(height,300)})
+                .extract({left:0,top:0,width:Math.min(width,500),height:Math.min(height,500)})
                 .flatten({ background: { r: 255, g: 245, b: 238, alpha: 1 } })
                 .jpeg()
                 .toFile(outputImage);
@@ -135,10 +159,10 @@ const updateProduct = async(req,res)=>{
                 throw error;
             }
             })
-        );
-
+        );*/
+      
        
-        const updateProduct = await Product.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,status:req.body.status,price:req.body.price,description:req.body.description,images:cropperImage,category_id:req.body.category_id}});
+        const updateProduct = await Product.findByIdAndUpdate({_id:req.body.id},{$set:{name:req.body.name,status:req.body.status,price:req.body.price,description:req.body.description,images:product.images,category_id:req.body.category_id,earlierPrice:req.body.price}});
        if(updateProduct){
         res.redirect('/admin/product');
        }

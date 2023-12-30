@@ -26,7 +26,7 @@ const add_to_cart = async(req,res)=>{
         if(req.session.user_id){
 
         const existingCart = await Cart.findOne({userId:req.body.userId});
-
+ console.log(req.body.productName);
 
 
         if(existingCart){
@@ -50,32 +50,34 @@ const add_to_cart = async(req,res)=>{
 
             }
 
-
-
-
-
-
             const existingProduct = existingCart.product.find((p)=>String(p.productId) === String(req.body.productId));
           
             if(existingProduct){
+               
             await Cart.updateOne({
                 userId:req.body.userId,
                 'product.productId':req.body.productId
             },
             {
+              
                 $inc:{'product.$.quantity':1,
-            'product.$.price':parseFloat(req.body.price)}
+            'product.$.price':parseFloat(req.body.price)},
+            $set:{'product.$.name':req.body.productName},
+            
+
             }
          );
 
     
         }else{
+           
             await Cart.updateOne({
                 userId:req.body.userId
             },
             {$push:{
                 product:{
                     productId:req.body.productId,
+                    name:req.body.productName,
                     price:parseFloat(req.body.price),
                     quantity:1
                 }
@@ -84,15 +86,15 @@ const add_to_cart = async(req,res)=>{
     );
 
   
-
         }
         
         
-    }else{
+    }else{  
             const cart_obj = new Cart({
                 userId : req.body.userId,
                 product:[{
                     productId:req.body.productId,
+                    name:req.body.productName,
                     price:parseFloat(req.body.price),
                     quantity:1
                 }],
@@ -146,8 +148,10 @@ const add_to_cart = async(req,res)=>{
     }
 }
 
+
 const add_to_cart1 = async(req,res)=>{
     try{
+        console.log(req.body.productName)
       if(req.session.user_id){
         const {userId,productId,price,quantity} = req.body;
         const existingCart = await Cart.findOne({userId:userId});
@@ -213,7 +217,7 @@ const add_to_cart1 = async(req,res)=>{
                     {
                         $inc:{'product.$.quantity':quantity,
                         'product.$.price':parseFloat(price)*quantity },
-                       // $set:{'product.$.price':(parseFloat(price)+parseFloat(existingProduct.price))*quantity}
+                        $set:{'product.$.name':req.body.productName}
                     }
                     );
 
@@ -226,6 +230,7 @@ const add_to_cart1 = async(req,res)=>{
                 {
                     $push:{product:{
                         productId:productId,
+                        name:req.body.productName,
                         price:parseFloat(price)*quantity,
                         quantity:quantity
                     }}
@@ -239,6 +244,7 @@ const add_to_cart1 = async(req,res)=>{
                 userId:userId,
                 product:[{
                     productId:productId,
+                    name:req.body.productName,
                     price:parseFloat(price)*quantity,
                     quantity:quantity
                 }]
@@ -286,8 +292,8 @@ const add_to_cart1 = async(req,res)=>{
 const updateCart = async(req,res)=>{
     try{
        
-    const {userId,productId,quantity,price,action} = req.body;
-    
+    const {userId,productId,quantity,price,action,nameInput} = req.body;
+    console.log(nameInput)
     const productCheck = await Product.findById(productId);
     console.log(productCheck.quantity);
     console.log(quantity)
@@ -306,7 +312,8 @@ const updateCart = async(req,res)=>{
         },{
             $set:{
                 'product.$.quantity': quantity,
-                'product.$.price': parseFloat(price)
+                'product.$.price': parseFloat(price),
+                'product.$.name':nameInput
             },
          
         },{
