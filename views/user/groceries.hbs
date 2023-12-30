@@ -15,14 +15,14 @@
 <div class=" row  m-5" style="background:#f875">
 
     <div class="col ">
-   <img src="images/18.jpg" width="150px" height="100px" class="rounded rounded-circle m-5 "  alt="images/1699781995558-wp2293559.jpg">
+   <a href ="/all"><img src="images/18.jpg" width="150px" height="100px" class="rounded rounded-circle m-5 "  alt="images/1699781995558-wp2293559.jpg"></a> 
     <p class=" " style="margin:0 100px"> <a href="/all" style="text-decoration: none;" class="text-success">All</a></p>
   </div>
 
    {{#each cat_data}}
    {{#unless this.is_disabled}}
   <div class="col ">
-   <img src="images/{{this.image}}" width="150px" height="100px" class="rounded rounded-circle m-5 "  alt="{{this.image}}">
+  <a href="/{{this.category}}"><img src="images/{{this.image}}" width="150px" height="100px" class="rounded rounded-circle m-5 "  alt="{{this.image}}"></a> 
     <p class=" " style="margin:0 100px"> <a href="/{{this.category}}" style="text-decoration: none;" class="text-success">{{this.category}}</a></p>
   </div>
   {{/unless}}

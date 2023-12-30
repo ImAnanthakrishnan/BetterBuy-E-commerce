@@ -6,7 +6,7 @@
   <thead>
     <tr>
      
-      <th scope="col">No</th>
+     <!-- <th scope="col">No</th>-->
       <th scope="col">Image</th>
       
           <th scope="col">Name</th>
@@ -23,7 +23,7 @@
         {{#unless value.category_id.is_disabled}}
         {{#unless value.is_disabled}}
         <tr>
-          <td scope="row">{{index}}</td>
+         <!-- <td scope="row">{{index}}</td>-->
         {{#if value.images.[0]}}
           <td><img src="/images/{{value.images.[0]}}" alt="{{value.images.[0]}}"></td>
           {{else}}
@@ -36,9 +36,11 @@
          
           <td>{{value.category_id.category}}</td>
            
-          
+           {{#if status1}}
           <td class="bg-success">{{value.status}}</td>
-
+          {{else}}
+           <td class="bg-danger">{{value.status}}</td>
+           {{/if}}
            <td>{{value.quantity}}</td>
           <td><a href="/admin/update-inventory?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a></td>
         </tr>

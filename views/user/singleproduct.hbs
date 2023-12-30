@@ -32,7 +32,8 @@
             <script>console.log('{{user._id}}')</script>
               <input type="hidden" name="productId" value="{{product._id}}">
                <input type="hidden" name="price" value="{{product.price}}">
-            <input type="number" name="quantity" style="height: 35px;background-color:lightgreen;" min="1" value="1">
+                <input type="hidden" name="productName" value="{{product.name}}">
+            <input type="number" name="quantity" style="height: 35px;background-color:lightgreen;" min="1" value="1">KG
             {{#if product.is_cancelled}}
             <button disabled type="submit" class="buy-btn addToCartBtn" aria-placeholder="1">SOLD</button>
             {{else}}
@@ -45,7 +46,7 @@
              <div id="error_true" class="text-danger"></div>
         </div>
     </div>
-<div class="rate mt-5"><h4 class="m-3 text-light">Rate us</h4>
+<!--<div class="rate mt-5"><h4 class="m-3 text-light">Rate us</h4>
     <div class="rating container">
         <div class="post">
             <div class="text">Thanks for rating us!</div>
@@ -73,7 +74,7 @@
             </form>
         </div>
     </div>
-    </div>
+    </div>-->
     </section>
     <script>
 

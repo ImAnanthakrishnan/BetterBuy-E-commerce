@@ -110,33 +110,7 @@ function submitForm() {
         formData.append('newImages[]', image, `image_${index}`);
     });
 }
-          // Loop through selected files
-      /*  for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-
-            // Create a new container for each image preview
-            const imageContainer = document.createElement('div');
-              imageContainer.style.display = 'inline-block'
-            imageContainer.style.marginRight = '10px';
-
-            // Create a new image element for each file
-            const img = document.createElement('img');
-            img.style.maxWidth = '300px';
-            img.style.maxHeight = '300px';
-
-            // Set up FileReader to read the image data
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-
-            // Append the image to the image container
-            imageContainer.appendChild(img);
-
-            // Append the image container to the preview container
-            previewContainer.appendChild(imageContainer);
-        }*/
+ 
 }
 
  const form = document.getElementById('form');

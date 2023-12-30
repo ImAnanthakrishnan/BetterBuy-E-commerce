@@ -39,7 +39,12 @@
             <span class="text-primary font-weight-bold">{{inventoryCount}}</span>
         </div>
     </div>
-
+          <div class="mb-3" >
+    <!--<button onclick="fetchData('daily')">Daily</button>-->
+    <!--<button onclick="fetchData('weekly')">Weekly</button>-->
+  <button   onclick="fetchData('monthly')">Monthly</button>
+    <button onclick="fetchData('yearly')">Yearly</button>
+  </div>
 
     <div class="charts">
         <div class="charts-card">
@@ -51,7 +56,180 @@
             <p class="chart-title">Purchase and Sales Orders </p>
             <div id="area-chart"></div>
         </div>
+
     </div>
 </main>
 
 </div><!--grid -conrteine-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.44.0/apexcharts.min.js" integrity="sha512-9ktqS1nS/L6/PPv4S4FdD2+guYGmKF+5DzxRKYkS/fV5gR0tXoDaLqqQ6V93NlTj6ITsanjwVWZ3xe6YkObIQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+async function fetchData(timeInterval) {
+  console.log(timeInterval);
+
+  let apiUrl1;
+  let apiUrl2;
+  /*if (timeInterval === 'daily') {
+    apiUrl1 = `/admin/weeklyBarChart`;
+    apiUrl2 = `/admin/yearlyAreaChart`;
+  } else*/ if (timeInterval === 'weekly') {
+    apiUrl1 = `/admin/weeklyBarChart`;
+     apiUrl2 = `/admin/weeklyAreaChart`;
+  } else if (timeInterval === 'monthly') {
+    apiUrl1 = `/admin/monthlyBarChart`;
+     apiUrl2 = `/admin/monthlyAreaChart`;
+  } else if (timeInterval === 'yearly') {
+    apiUrl1 = `/admin/yearlyBarChart`;
+     apiUrl2 = `/admin/yearlyAreaChart`;
+  }
+
+  try {
+    const response = await fetch(apiUrl1,{
+      method:'GET'
+    });
+    console.log(apiUrl2)
+    const response1 = await fetch(apiUrl2,{
+      method:'GET'
+    });
+    
+   // console.log(response)
+    if (!response.ok) {
+      throw new Error(`Error fetching data. Status: ${response.status}`);
+    }
+   else{
+    const data = await response.json();
+console.log(data)
+    var barChartOptions = {
+      series: [{
+        data: data.top5AverageQuantities
+      }],
+      chart: {
+        type: 'bar',
+        height: 350,
+        toolbar: {
+          show: false
+        }
+      },
+      colors: [
+        "#246dec",
+        "#cc3c43",
+        "#367952",
+        "#f5b74f",
+        "#4f35a1"
+      ],
+      plotOptions: {
+        bar: {
+          distributed: true,
+          borderRadius: 4,
+          horizontal: false,
+          columnWidth: '40%'
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: false
+      },
+      xaxis: {
+        categories: data.top5ProductNames,
+      },
+      yaxis: {
+        title: {
+          text: "Count"
+        }
+      }
+    };
+
+    var barChart = new ApexCharts(document.querySelector("#bar-chart"), barChartOptions);
+    barChart.render();
+   }
+
+   if(!response1.ok){
+     throw new Error(`Error fetching data. Status: ${response1.status}`);
+   }else{
+   const data1 = await response1.json();
+   console.log(data1)
+   var areaChartOptions = {
+    series: [{
+    name: 'Purchase Orders',
+
+    data: data1.purchase
+  }, {
+    name: 'Sales Orders',
+
+    data: data1.sales
+  }],
+    chart: {
+    height: 350,
+    type: 'area',
+    toolbar:{
+        show:false
+    }
+  },
+  colors:["#4f35a1","#246dec"],
+  dataLabels:{
+    enabled:false
+  },
+  stroke: {
+    curve: 'smooth'
+  },
+ 
+  labels: data1.months,
+  markers: {
+    size: 0
+  },
+  yaxis: [
+    {
+      title: {
+        text: 'Purchase Orders',
+      },
+    },
+    {
+      opposite: true,
+      title: {
+        text: 'Sales Orders',
+      },
+    },
+  ],
+  tooltip: {
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: function (y) {
+        if(typeof y !== "undefined") {
+          return  y.toFixed(0) + " points";
+        }
+        return y;
+      }
+    }
+  }
+  };
+
+  var areaChart = new ApexCharts(document.querySelector("#area-chart"), areaChartOptions);
+  areaChart.render();
+
+  }
+
+  
+
+  } catch (error) {
+    console.error('Error fetching data:', error.message);
+  }
+};
+
+  document.addEventListener("DOMContentLoaded", function () {
+    
+    fetchData('yearly');
+  });
+
+
+
+
+
+
+ 
+
+
+   
+</script>

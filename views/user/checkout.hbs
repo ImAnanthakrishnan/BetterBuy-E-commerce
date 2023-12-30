@@ -22,6 +22,7 @@
             {{/each}}
 
         </div>
+        <!--right side-->
         <div class="right">
             <h1>CHECKOUT</h1>
             <div class="form">
@@ -53,7 +54,7 @@
                     </select>
                      <div class="error text-danger"></div>
                 </div>
-                <div id="addressDetails" class="group">
+               -- <div id="addressDetails" class="group">
                    <div>
                     <label for="address">Address:</label>
                     <input type="text" name="address" id="address" readonly required>
@@ -67,6 +68,7 @@
                      {{/each}}
                          {{#each cartData}}
                      {{#each this.product}}
+                     <input type="hidden" name="proName" value="{{this.name}}">
                       <input type="hidden" name="quantity1" value="{{this.quantity}}">
                      <script>console.log('{{this.quantity}}')</script>
                        <input type="hidden" name="price" value="{{this.price}}">
@@ -115,7 +117,7 @@
         <div class="d-none" id="saveButton">
             <a class="text-decoration-none text-bold  text-light" style="cursor: pointer;" onclick="AddAddress(event,[{id:'address',name:'address'},{ id: 'district', name: 'district' }, { id: 'city', name: 'city' }, { id: 'pincode', name: 'pincode' }, { id: 'state', name: 'state' }, { id: 'country', name: 'country' }])">Save</a>
         </div>
-      <!-- <div class=""><a class="text-decoration-none" href="/add-address"><button class="btn btn-success btn-rounded">Add</button></a></div> -->
+     
        
     </div>
     
@@ -162,6 +164,12 @@
         </div>
     </div>
 </div>
+
+
+
+
+</div>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
       
@@ -422,6 +430,9 @@ async function AddAddress(event,fields) {
            /// alert(result.message)
             showDynamicModal(result.message);
             window.location.reload()
+        }else{
+            const result = await response.json();
+             showDynamicModal(result.message);
         }
 
        document.getElementById('addButtons').classList.toggle('d-none');
@@ -430,104 +441,8 @@ async function AddAddress(event,fields) {
 
 
 
-/*async function AddAddress(event,fields){
-    event.preventDefault();
-   const ids = fields.map(field =>field.id)
-     const requestBody=[];
-       console.log(ids)
-       /* ids.forEach(id => {
-            const inputField = document.getElementById(id);
-              if (inputField) {
-            requestBody[id] = inputField.value;
-            inputField.readOnly = true;
-           
-        } else {
-            console.error(`Element with id '${id}' not found.`);
-        }
-    
-        });*/
 
-          /*for (const id of ids) {
-        const inputField = document.getElementById(id);
-
-        // Check if the input field exists
-        if (inputField) {
-            // Check if the field is required and has a value
-            const value = inputField.value.trim();
-            if (!value) {
-                // Display error and return if the field is required but empty
-                console.log(id)
-                displayErrors(id, 'This field is required.');
-                return;
-            }
-
-            // Assign value to requestBody
-            requestBody[id] = value;
-
-            // Disable further editing of the input field
-            inputField.readOnly = true;
-        } else {
-            console.error(`Element with id '${id}' not found.`);
-        }
-    }
-
-        
-        const addres = requestBody.address;
-        const addressId = requestBody.addressId;
-        const district = requestBody.district;
-         const city = requestBody.city
-        const pincode = requestBody.pincode;
-        const state = requestBody.state;
-        const country = requestBody.country;
-        
-        const response = await fetch('/add-address',{
-            method:'POST',
-           headers:{
-            'Content-Type':'application/json'
-           },
-            body:JSON.stringify({
-                addres,
-                addressId,
-                district,
-                city,
-                pincode,
-                state,
-                country,
-                checkout:'address'
-            })
-       
-        })
-      const alertContainer = document.getElementById('alertContainer');
-    const alertStrong = alertContainer.querySelector('alertStrong');
-
-        if(response.ok){
-            const result = await response.json();
-            window.location.reload();
-                alertStrong.textContent = result.message;
-        alertContainer.classList.add('alert-success', 'show');
-
-      
-        setTimeout(() => {
-            alertStrong.textContent = '';
-            alertContainer.classList.remove('alert-success', 'show');
-        }, 2000);
-        }else{
-             const result = await response.json();
-             alert(result.message);
-        }
-
-        // Toggle visibility of buttons
-        document.getElementById('addButtons').classList.toggle('d-none');
-        document.getElementById('saveButton').classList.toggle('d-none');
-}
-function displayErrors(fieldId, message) {
-    const errorDiv = document.querySelector('#' + fieldId + ' + .error');
-    console.log(message);
-    console.log(fieldId);
-    errorDiv.innerHTML = message;
-    errorDiv.style.display = 'block';
-}
-*///////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 
 async function placeOrder(event){
     try{
@@ -675,53 +590,6 @@ function resetErrors() {
     });
 }
 
-/*function validateFields(fields) {
-    let isValid = true;
 
-    fields.forEach(field => {
-        const inputField = document.getElementById(field.id);
-        if (inputField) {
-            const value = inputField.value.trim();
-  const errorDisplay = document.getElementById(`${field.id}-error`);
-            // Example validation for non-empty fields
-             if (value === '') {
-                setError(errorDisplay, `Please enter a value for ${field.name}`);
-                isValid = false;
-            } else {
-                setSuccess(errorDisplay);
-            }
-          
-        } else {
-            console.error(`Element with id '${field.id}' not found.`);
-            isValid = false;
-        }
-    });
-
-    return isValid;
-}
-function setError(element, message) {
-    element.innerText = message;
-    element.classList.add('error');
-}
-
-function setSuccess(element) {
-    element.innerText = '';
-    element.classList.remove('error');
-}
-*/
-
-/*async function addAddress(){
-    try{
-        const ele = document.getElementById("addressId")
-        const id = ele.value;
-        const response = await fetch(`/add-address`,{
-            method:'GET'
-        });
-    
-    }
-    catch(err){
-        console.log('Error:',err)
-    }
-}*/
 
 </script>

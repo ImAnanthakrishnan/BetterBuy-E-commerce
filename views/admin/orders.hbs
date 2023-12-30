@@ -6,12 +6,12 @@
   <thead>
     <tr>
      
-      <th scope="col">No</th>
+     <!-- <th scope="col">No</th>-->
       <th scope="col">Image1</th>
       <th scope="col">Name</th>
       <th scope="col">Quantity</th>
           <th scope="col">Total Price</th>
-         <!-- <th scope="col">Address</th>-->
+          <th scope="col">Address</th>
           <th scope="col">Full name</th>
           <th scope="col">Phone</th>
           <th scope="col">paymentMethod</th>
@@ -25,16 +25,20 @@
      {{#each orderData as |value index|}}
        
         <tr>
-          <td scope="row">{{index}}</td>
+         <!-- <td scope="row">{{index}}</td>-->
          
           <td>{{#each value.product}}<img src="/images/{{this.productId.images.[0]}}">{{/each}}</td>
           <td>{{#each value.product}}{{this.productId.name}},{{/each}}</td>
       
           <td>{{value.quantity}}</td>
           <td>{{value.totalPrice}}/-</td>
-         <!-- {{#each value.address}}
-          <td>{{this.address.address}}</td>
-          {{/each}}-->
+          {{#each value.address}}
+          <td class="">{{this.address}}<br>
+         Pincode:{{this.pincode}}<br>
+         District:{{this.district}}<br>
+         City:{{this.city}}
+          </td>
+          {{/each}}
         <td>{{value.fullname}}</td>
         <td>{{value.phone}}</td>
          <td>{{value.paymentMethod}}</td>
@@ -55,7 +59,7 @@
             <option value="{{value.status}}">{{value.status}}</option>
             <option value="Cancelled">Cancel</option>
             <option value="Pending">Pending</option>
-            <option value="Shipped">Shipped</option>
+            <option value="Out For Delivery">Out For Delivery</option>
             <option value="Delivered" >Delivered</option>
           </select>
           
@@ -78,6 +82,20 @@
   </tbody>
 
 </table>
+<div class="pagination-container">
+<div class="pagination">
+  {{#if totalPages}}
+    {{#each pages}}
+      {{#if this.isCurrentPage}}
+        <span>{{this.page}}</span>
+      {{else}}
+        <a href="?page={{this.page}}">{{this.page}}</a>
+      {{/if}}
+    {{/each}}
+  {{/if}}
+</div>
+</div>
+
 </div>
 <script>
      function updateStatus(orderId, newStatus) {

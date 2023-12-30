@@ -39,7 +39,7 @@
                                             {{else}}
                                               <li class="page-item"><button class="page-link decrease-btn"   data-product-id="{{this.productId._id}}" data-price="{{this.price}}" data-product-price="{{this.productId.price}}" data-action="desc"><i class="fa-solid fa-minus"></i></button></li>
                                             {{/if}}
-                                           
+                                           <input type="hidden" name="" class="page-link" value="{{this.name}}" id="nameInput_{{this.productId._id}}">
                                             <li class="page-item"><input type="text" name="" class="page-link" value="{{this.quantity}}" id="quantityInput_{{this.productId._id}}" min="1" readonly></li>
                                             {{#if this.productId.is_cancelled}}
                                                 <li class="page-item"><button disabled class="page-link increase-btn"  data-product-id="{{this.productId._id}}" data-price="{{this.price}}" data-product-price="{{this.productId.price}}" data-action="inc"><i class="fa-solid fa-plus"></i></button></li>
@@ -196,6 +196,8 @@
 
       const increaseNumber = (productId,price,productPrice,action)=>{
        const quantityInput = document.getElementById(`quantityInput_${productId}`);
+       const nameInput = document.getElementById(`nameInput_${productId}`).value;
+       console.log(nameInput)
        const currentQuantity = parseInt(quantityInput.value,10);
        console.log(productPrice)
        const priceInput = parseFloat(price);
@@ -206,11 +208,12 @@
       
       const Price = priceInput + proPrice;
      console.log(Price)
-       updateQuantity(productId,newQuanity,Price,action);
+       updateQuantity(productId,newQuanity,Price,action,nameInput);
     }
 
         const decreseNumber = (productId,price,productPrice,action)=>{
-     const quantityInput = document.getElementById(`quantityInput_${productId}`);
+     const quantityInput = document.getElementById(`quantityInput_${productId}`)
+     const nameInput = document.getElementById(`nameInput_${productId}`).value;
      const currentQuantity = parseInt(quantityInput.value, 10);
      console.log(productPrice)
       const priceInput = parseFloat(price);
@@ -221,16 +224,16 @@
       
         const Price = priceInput - proPrice;
         console.log(Price)
-        updateQuantity(productId, newQuanity,Price,action);
+        updateQuantity(productId, newQuanity,Price,action,nameInput);
         }
      }
 
 
 
-    async function updateQuantity(productId,newQuanity,Price,action){
+    async function updateQuantity(productId,newQuanity,Price,action,nameInput){
         try{
          
-        // console.log(newPrice)
+         console.log(nameInput)
             const response = await fetch('/update-cart',{
                 method:'POST',
                 headers:{
@@ -241,7 +244,8 @@
                     productId,
                     quantity:newQuanity,
                     price:Price,
-                    action
+                    action,
+                    nameInput
                 })
             });
  const errorTrueElement = document.getElementById('error_true');

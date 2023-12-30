@@ -1,4 +1,4 @@
-<section class="product " style="min-height: 150vh; background-color:lightgreen">
+<section class="product " style="min-height: 160vh; background-color:lightgreen">
     <div class="">
     <div class="" style="position: relative;">
         <img src="/images/wp4184149.jpg" class="object-fit-contain w-100 " style="" alt="">
@@ -37,7 +37,7 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
 
       <div class="dropdown mb-1 mt-2 fs-5">
   <label for="">Sort by:</label>
-  <select name="category_id" id="" class="form-control">
+<select name="category_id" id="" class="form-control">
     <option value="">Select</option>
     {{#each cat_data}}
     <option value="{{this._id}}">{{this.category}}</option>
@@ -45,9 +45,9 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
   </select>
 </div>
   </div>
- <div class="d-flex mt-2">
-   <aside id="sidebar" >
-      <div class="accordion   " id="accordionPanelsStayOpenExample" style="width: 100%;">
+ <div class="d-flex flex-column flex-md-row mt-2">
+   <aside id="sidebar" style="max-width: 200px;">
+      <div class="accordion   " id="accordionPanelsStayOpenExample">
         <form class="filterForm" onsubmit="filter(event)" >
   <div class="accordion-item">
     <h2 class="accordion-header">
@@ -79,7 +79,7 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
       </div>
     </div>
   </div>
-  <div class="accordion-item">
+  <!--<div class="accordion-item">
     <h2 class="accordion-header">
       <div class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree" style="background-color: rgba(20,219,20);">
         Product Type
@@ -95,7 +95,7 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
     
       </div>
     </div>
-  </div>
+  </div>-->
   <button class="btn btn-success" style="width:100%" type="submit">Check</button>
   </form>
 </div>
@@ -104,7 +104,7 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
  
 
 
-      <div class="row  pro-card " id="productCards">
+      <div class="row  pro-card mx-auto" id="productCards">
         {{#each product}}
         {{#unless this.category_id.is_disabled}}
         {{#unless this.is_disabled}}
@@ -120,12 +120,16 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
             <img src="/images/{{this.images.[0]}}"  width="65%" height="40%" class=" pb-3 ms-5" alt="{{this.images}}">
             <h4 class="head1">{{this.name}}</h4>
             <p class="per1">{{this.description}}</p>
+            {{#if this.is_offer}}
+            <h4 class="head1">Price:<del>{{this.earlierPrice}}/-</del>{{this.price}}/-</h4> 
+            {{else}}
             <h4 class="head1">Price:{{this.price}}/-</h4>
+            {{/if}}
             <form class="addToCartForm" onsubmit="addToCart(event)">
             <input type="hidden" name="userId" value="{{../user._id}}">
             <input type="hidden" name="productId" value="{{this._id}}">
             <input type="hidden" name="price" value="{{this.price}}">
-            
+             <input type="hidden" name="productName" value="{{this.name}}">
            {{#if is_cancelled}}
             <button disabled type="submit"  class="btnc my-4 addToCartBtn"><i class="bi bi-x-circle-fill me-1 fs-3"></i>SOLD</button>
             {{else}}
@@ -135,7 +139,7 @@ Welcome to our vegetables page, your gateway to a world of premium natural and o
             </form>
 
             
-           <a href="/single-product?id={{this._id}} " class="text-decoration-none"><button class="btnc1">View</button ></a>
+           <a href="/product?id={{this._id}} " class="text-decoration-none"><button class="btnc1">View</button ></a>
           </div>
         </div>
       </div>
@@ -239,6 +243,12 @@ const queryString = new URLSearchParams(formData).toString();
 
       // Show or hide the product based on category
       element.style.display = isInCategory ? "block" : "none";
+
+          if (isInCategory &&  categoryProductIds.length  === 2) {
+          element.style.marginRight = "100px"; // Adjust the margin as needed
+        } else {
+          element.style.marginRight = "0";
+        }
     });
     }else{
       console.log('Error')

@@ -1,44 +1,7 @@
-<!--<section class="container-fluid" >
-    <div class="d-flex justify-content-center align-items-center" style="height: 650px;">
-      {{#if err}}
-      <div class="alert alert-warning" role="alert">
-  {{message}}
-</div>
-{{/if}}
-       <form action="/verify-otp" method="post"  class="  p-2  width">
-        <h2 class="mb-3">OTP VERIFICATION</h2>
-  <div class="mb-3">
-    <label for="exampleInputOtp1" class="form-label">Enter the otp</label>
-    <input type="text" class="form-control" id="exampleInputOtp1" name="otp">
-  </div>
-  <div class="">
-    <label for="exampleInputOtp2" class="form-label"></label>
-    <input type="hidden" value="{{otps}}" class="form-control" id="exampleInputOtp1" name="userId">
-  </div>
-   <div class="">
-    <label for="exampleInputOtp3" class="form-label"></label>
-    <input type="hidden" value="{{email}}" class="form-control" id="exampleInputOtp3" name="email">
-  </div>
- 
-<div class="mb-3"><button type="submit" class="btn btn-primary">Submit</button> <span>or <a href="/">return to store</a></span></div>
-</form>
 
-<form action="/resend-otp" method="post" class=" p-2 width">
- <div class="">
-    <label for="exampleInputOtp2" class="form-label"></label>
-    <input type="hidden" value="{{otps}}" class="form-control" id="exampleInputOtp1" name="userId">
-  </div>
-   <div class="">
-    <label for="exampleInputOtp3" class="form-label"></label>
-    <input type="hidden" value="{{email}}" class="form-control" id="exampleInputOtp3" name="email">
-  </div>
-<button type="submit" class="btn btn-warning">Resend</button>
-</form>
-    </div>
- </section>-->
  
     <div
-      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+      class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center" style="background-color: lightgreen;">
       <div class="d-flex align-items-center justify-content-center w-100">
         <div class="row justify-content-center w-100">
           <div class="col-md-8 col-lg-6 col-xxl-3">
@@ -182,48 +145,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-       /*function updateOTPTimer() {
-    const currentTime = new Date().getTime();
-    const expiresAt = new Date('{{expiresAt}}').getTime();
-   // const expiresAt = new Date(document.querySelector('[data-expires-at]').getAttribute('data-expires-at')).getTime();
-   
-
-    const timeRemaining = expiresAt - currentTime;
-    const timerElement = document.getElementById("otpTimer");
-
-    if (timeRemaining > 0) {
-
-      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-      timerElement.innerHTML = `Time remaining: ${seconds} seconds`;
-    } else {
-      timerElement.innerHTML = "OTP has expired";
-      clearInterval(timerInterval)
-    }
-  }
-
- function startOTPTimer() {
-  updateOTPTimer();  // Initial call to set the timer
-  // Call the updateOTPTimer function every second
-  timerInterval = setInterval(updateOTPTimer, 1000);
-}
-
-// Call the startOTPTimer function when the page loads or when you want to start the timer
-startOTPTimer();
-       /* $(document).ready(function() {
-            // Event listener for the button click
-            $('#updateButton').on('click', function() {
-                // Make an AJAX request to the server
-                $.ajax({
-                    method: 'POST',
-                    url: '/signup',
-                    success: function(data) {
-                        // Update the message and style on the page
-                        $('#message').text(data.message).attr('style', data.style);
-                    },
-                    error: function(err) {
-                        console.error('Error updating message:', err);
-                    }
-                });
-            });
-        });*/
+    
     </script>

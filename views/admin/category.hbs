@@ -3,7 +3,7 @@
 <table class="table my-3 table-hover " id="userTable">
   <thead>
     <tr>
-      <th scope="col">No:</th>
+     <!-- <th scope="col">No:</th>-->
       <th scope="col">Category</th>
       <th scope="col">Image</th>
       <th scope="col">Action</th>
@@ -14,7 +14,7 @@
     {{#each categoryData as |value index|}}
     {{#unless value.is_disabled}}
     <tr>
-      <th  scope="row">{{index}}</th>
+      <!--<th  scope="row">{{index}}</th>-->
       <td >{{value.category}}</td>
        <td ><img src="images/{{value.image}}" width="150px" height="150px" alt="{{value.images}}"></td>
      

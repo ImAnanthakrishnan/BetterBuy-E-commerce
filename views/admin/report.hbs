@@ -1,15 +1,36 @@
 <div class=" main-container" style="">
-  <h1 class="text-center mb-5">OrderDetails</h1>
+  <h1 class="text-center mb-5">Reports</h1>
+<div class="row">
+  <div class="col">
+    <a href="#" onclick="downloadExcel()" class="ms-3">
+        <button class="btn btn-success">Download Excel</button>
+    </a>
+  
+    <a href="#" onclick="downloadPdf()" class="ms-3">
+        <button class="btn btn-danger">Download Pdf</button>
+    </a>
+</div>
+<div class="col">
+    <div class="date-filter-container">
+      <form id="filterForm">
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate">
 
-<a href="/admin/export-ordersExcel">Download excel</a>
-<a class="ms-3" href="/admin/export-ordersPdf">Download PDF</a>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate">
+        
+        <button class="btn-secondary" type="submit">Filter</button>
+        </form>
+    </div>
+</div>
+</div>
 <br><br>
 <table class="table my-3 table-hover" id="userTable">
   
   <thead>
     <tr>
      
-      <th scope="col">No</th>
+     <!-- <th scope="col">No</th>-->
       <th scope="col">Image1</th>
       <th scope="col">Name</th>
       <th scope="col">Quantity</th>
@@ -30,7 +51,7 @@
      {{#each orderData as |value index|}}
        
         <tr>
-          <td scope="row">{{index}}</td>
+         <!-- <td scope="row">{{index}}</td>-->
          
           <td>{{#each value.product}}<img src="/images/{{this.productId.images.[0]}}">{{/each}}</td>
           <td>{{#each value.product}}{{this.productId.name}},{{/each}}</td>
@@ -63,3 +84,74 @@
 
 </table>
 </div>
+<script>
+
+   function downloadExcel() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const excelUrl = `/admin/export-ordersExcel?startDate=${startDate}&endDate=${endDate}`;
+        window.location.href = excelUrl;
+    }
+
+   function downloadPdf() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const excelUrl = `/admin/export-ordersPdf?startDate=${startDate}&endDate=${endDate}`;
+        window.location.href = excelUrl;
+    }
+
+
+  document.getElementById('filterForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        var startDate = document.getElementById('startDate').value;
+        var endDate = document.getElementById('endDate').value;
+
+        fetch('/admin/reports?startDate=' + startDate + '&endDate=' + endDate)
+            .then(response => response.json())
+            .then(data => {
+                // Append the filtered data to the table
+                console.log(data)
+                appendToTable(data);
+            })
+            .catch(error => console.error('Error:', error));
+
+  });
+      function appendToTable(filteredData) {
+        var tableBody = document.getElementById('userTable').getElementsByTagName('tbody')[0];
+           tableBody.innerHTML = '';
+        // Append each row of filtered data to the table
+        filteredData.forEach(function (value, index) {
+            var row = tableBody.insertRow();
+            row.insertCell(0).textContent = index + 1;
+            // Add other cells and populate with data as needed
+
+            // Example:
+            /// row.insertCell(1).innerHTML = '<img src="/images/' + value.product[0].productId.images[0] + '">';
+
+        var imagesCell = row.insertCell(1);
+        value.product[0].productId.images.forEach(function (image) {
+            var imgElement = document.createElement('img');
+            imgElement.src = "/images/" + image;
+            imagesCell.appendChild(imgElement);
+        });
+
+
+             row.insertCell(2).textContent = value.product[0].productId.name;
+              row.insertCell(3).textContent = value.product[0].productId.quantity;
+               row.insertCell(4).textContent = value.totalPrice;
+                 var cell = row.insertCell(5);
+                 cell.innerHTML = `
+                  ${value.address[0].address}<br>
+                  Pincode: ${value.address[0].pincode}<br>
+                  District: ${value.address[0].district}<br>
+                  City: ${value.address[0].city}
+                  `;
+                    row.insertCell(6).textContent = value.fullname;
+                      row.insertCell(7).textContent = value.phone;
+                      row.insertCell(8).textContent = value.paymentMethod;
+                        row.insertCell(9).textContent = new Date(value.createdAt).toLocaleDateString();
+        });
+    }
+
+
+</script>

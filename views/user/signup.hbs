@@ -1,37 +1,4 @@
- <!--<section class="container-fluid" >
-    <div class="d-flex justify-content-center align-items-center" style="height: 800px;">
-        {{#if err}}
-      <div class="alert alert-warning" role="alert">
-  {{message}}
-</div>
-{{/if}}
-       <form action="/signup" method="post"  class="  p-2  width">
-        <h2 class="mb-3">Create Account</h2>
-        <div class="mb-3">
-    <label for="exampleInputFirstname" class="form-label">First Name</label>
-    <input type="text" class="form-control" id="exampleInputFirstname"  name="fname">
-  </div>
-    <div class="mb-3">
-    <label for="exampleInputLastname" class="form-label">Last Name</label>
-    <input type="text" class="form-control" id="exampleInputLastname"  name="lname">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPhone1" class="form-label">Phone Number</label>
-    <input type="tel" class="form-control" id="exampleInputPhone1"  name="phone">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-  </div>
-  
- 
-</form>
-    </div>
- </section>-->
+
 
   <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
     data-sidebar-position="fixed" data-header-position="fixed" style=" background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/singleberry.jpg');
@@ -97,6 +64,12 @@
                   <div class="mb-4 input-control1">
                     <label for="exampleInputPassword1" class="form-label">Password</label>
                     <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                      <div class="error text-danger"></div>
+                  </div>
+
+                      <div class="mb-4 input-control1">
+                    <label for="exampleInputPassword2" class="form-label">Referal code <small class="text-danger">*not mandatory</small></label>
+                    <input type="text" class="form-control" id="exampleInputPassword2" name="ref_code">
                       <div class="error text-danger"></div>
                   </div>
       

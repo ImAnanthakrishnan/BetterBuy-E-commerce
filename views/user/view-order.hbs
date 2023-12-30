@@ -1,4 +1,4 @@
-<section class="container-fluid" style="min-height:200vh;background-color:lightgreen;">
+<section class="container-fluid" style="min-height:250vh;background-color:lightgreen;">
   <h1 class="text-center mb-5 ">Order Details</h1>
     <div class="line mb-2" style="margin: 0 35%;">
           </div>
@@ -26,7 +26,7 @@
  
 </div>
  {{/each}}
-<div class="card text-center" style="background-color:#fff5ee;">
+<div class="card text-center container" style="background-color:#fff5ee;">
   <div class="card-header">
     Delivery Details
   </div>
@@ -35,6 +35,12 @@
     <p class="card-text">{{order.address.address}}</p>
     <p class="card-text">Fullname:{{order.fullname}}</p>
     <p class="card-text">Phone:{{order.phone}}</p>
+     <p class="card-text">Phone:{{order.phone}}</p>
+      <p class="card-text">Address:{{order.address.[0].address}}</p>
+       <p class="card-text">District:{{order.address.[0].district}}</p>
+        <p class="card-text">City:{{order.address.[0].city}}</p>
+         <p class="card-text">State:{{order.address.[0].state}}</p>
+          <p class="card-text">Country:{{order.address.[0].country}}</p>
     
   </div>
   <div class="card-footer text-body-secondary">

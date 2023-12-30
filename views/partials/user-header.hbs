@@ -1,8 +1,8 @@
 
 
-<nav class="navbar navbar-expand-lg sticky-top" style="background-color: green;">
+<nav class="navbar navbar-expand-lg sticky-top" style="background-color:green">
   <div class="container">
-    <a class="navbar-brand" href="#"><h3>BetterBuy</h3></a>
+    <a class="navbar-brand" href="#"><h3 style="">BetterBuy</h3></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class=""><i class="bi bi-list"></i></span>
     </button>
@@ -14,8 +14,8 @@
         <li class="nav-item">
           <a class="nav-link" href="/grocery">Groceries</a>
         </li>
-        <li class="nav-item ">
-          <a class="nav-link " href="#"  >
+        <!--<li class="nav-item ">
+          <a class="nav-link " href="#">
            Blog
           </a>
           <!--<ul class="dropdown-menu">
@@ -24,12 +24,12 @@
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>-->
-        </li>
+        <!--</li>-->
         <li class="nav-item">
-          <a class="nav-link " href="#">About</a>
+          <a class="nav-link " href="/about">About</a>
         </li>
          <li class="nav-item">
-          <a class="nav-link " href="#">Contact</a>
+          <a class="nav-link " href="/contact">Contact</a>
         </li>
       </ul>
      <form class="d-flex" role="search"  id="searchForm" >
@@ -136,171 +136,10 @@
 
  function redirectToSingleProductPage(productId) {
        
-        window.location.href = `/single-product?id=${productId}`;
+        window.location.href = `/product?id=${productId}`;
  }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-    /*searchInput.addEventListener('focus', function () {
-        const searchItem = searchInput.value.trim();
-
-        if (searchItem !== '') {
-            searchResultsContainer.style.display = 'block';
-        }
-    });
-
-    searchInput.addEventListener('blur', function () {
-        searchResultsContainer.style.display = 'none';
-    });*/
-
-
-
-
-
-
-
-
-
-/*const searchInput = document.getElementById('searchInput');
-  const searchResultsContainer = document.getElementById('searchResults');
-const searchForm = document.getElementById('searchForm');
-
-searchInput.addEventListener('input', function () {
-    const searchItem = searchInput.value.trim();
-
-    if (searchItem === '') {
-        searchResultsContainer.innerHTML = '';
-        searchResultsContainer.style.display = 'none';
-    }
-});
-
-searchForm.addEventListener('focus', function () {
-    const searchItem = searchInput.value.trim();
-
-    if (searchItem !== '') {
-        searchResultsContainer.style.display = 'block';
-    }
-});
-
-searchForm.addEventListener('blur', function () {
-    searchResultsContainer.style.display = 'none';
-});
-
-
-
-
-searchForm.addEventListener('submit', async function (event) {
-    event.preventDefault();  // Prevent the default form submission behavior
-
-    const searchItem = searchInput.value.trim();
-    console.log('helo');
-    console.log(searchItem);
-
-    searchResultsContainer.innerHTML = '';
-
-    const response = await fetch(`/home?item=${searchItem}`, {
-        method: 'GET'
-    });
-
-    console.log('helo1');
-
-    if (response.ok) {
-        const data = await response.json();
-        const products = data.product;
-        console.log(products);
-
-        if (products.length === 0) {
-            searchResultsContainer.innerHTML = '<p>No results found</p>';
-        } else {
-            products.forEach(product => {
-                const productContainer = document.createElement('div');
-                productContainer.classList.add('product-container');
-
-                const productName = document.createElement('p');
-                productName.textContent = product.name;
-
-                const productImage = document.createElement('img');
-
-                if (Array.isArray(product.images) && product.images.length > 0) {
-                    productImage.src = `/images/${product.images[0]}`;
-                }
-
-                productImage.alt = 'Product Image';
-
-                productContainer.appendChild(productName);
-                productContainer.appendChild(productImage);
-
-                searchResultsContainer.appendChild(productContainer);
-            });
-        }
-    }
-});
-*/
-
-
-/*async function search(){
-  try{
-    event.preventDefault();
-
-    const searchItem = searchInput.value
-  const searchResultsContainer = document.getElementById('searchResults');
-  console.log('helo')
-  console.log(searchItem)
-
-   // Clear previous search results
-      searchResultsContainer.innerHTML = '';
-
-     const response = await fetch(`/home?item=${searchItem}`,{
-      method:'GET'
-     });
-  console.log('helo1')
-     if(response.ok){
-      const data = await response.json()
-        const products = data.product;
-      console.log(products)
- 
-
-     if (products.length === 0) {
-    // Display a message when no results are found
-    searchResultsContainer.innerHTML = '<p>No results found</p>';
-     }else{
-
-          products.forEach(product => {
-      const productContainer = document.createElement('div');
-      productContainer.classList.add('product-container');
-
-      const productName = document.createElement('p');
-      productName.textContent = product.name;
-
-      const productImage = document.createElement('img');
-    
-              if (Array.isArray(product.images) && product.images.length > 0) {
-                productImage.src = `/images/${product.images[0]}`;
-            }
-
-      productImage.alt = 'Product Image';
-
-      // Append product name and image to the container
-      productContainer.appendChild(productName);
-      productContainer.appendChild(productImage);
-
-      // Append the product container to the search results container
-      searchResultsContainer.appendChild(productContainer);
-    });
-  }
-
-     
-    }else{
-    console.log('No response');
-    }
-   
-  }
-  catch(err){
-      console.log('Error:', err);
-  }
-     
-   
-  }
-*/
 
 </script>

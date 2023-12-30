@@ -1,0 +1,24 @@
+<section class="main-container">
+   <h1 class="text-center mb-5">Banners</h1>
+      <a href="/admin/add-banner" class="text-decoration-none"><button class="btnc ">ADD BANNER </button></a>
+      {{#each banner}}
+    <div class="card mb-3">
+  <img src="images/{{this.image}}" class="card-img-top" alt="{{this.image}}">
+  <div class="card-body">
+    <p>Position:{{this.position}}</p>
+     <a onclick="checker()" class="text-danger " href="/admin/delete-banner?id={{this._id}}" ><i class="fa-solid fa-trash"></i></a>
+  </div>
+</div>
+{{/each}}
+</section>
+
+<script>
+  function checker(){
+    var result = confirm('Are you sure?');
+    if(result == false){
+      event.preventDefault()
+    }
+  }
+
+
+  </script>

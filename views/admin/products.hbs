@@ -2,12 +2,23 @@
  <div class=" main-container" style="">
    <a href="/admin/add-product" class="text-decoration-none"><button class="btnc ">ADD PRODUCT </button></a>
 
+    <form>
+       <div class="input-group w-25 h-25 m-1 ">
+        <input type="text" class="form-control bg-warning" placeholder="Search category" name="search">
+        <button class="btn btn-success">
+            <span class="bi bi-search"></span>
+            
+        </button>
+       
+    </div>
+    </form>
+
 <table class="table my-3 table-hover" id="userTable">
   {{#if productData.length}}
   <thead>
     <tr>
      
-      <th scope="col">No</th>
+     <!-- <th scope="col">No</th>-->
       <th scope="col">Image1</th>
       <th scope="col">Image2</th>
       <th scope="col">Image3</th>
@@ -25,7 +36,7 @@
         {{#unless value.category_id.is_disabled}}
         {{#unless value.is_disabled}}
         <tr>
-          <td scope="row">{{index}}</td>
+         <!-- <td scope="row">{{index}}</td>-->
         {{#if value.images.[0]}}
           <td><img src="/images/{{value.images.[0]}}" alt="{{value.images.[0]}}"></td>
           {{else}}
@@ -44,7 +55,7 @@
          
           <td>{{value.name}}</td>
           <td>{{value.price}}/-</td>
-          {{#if status}}
+          {{#if status1}}
           <td class="bg-success">{{value.status}}</td>
           {{else}}
            <td class="bg-danger">{{value.status}}</td>
@@ -81,43 +92,5 @@
 
  
 
-
-<!--<main class="table">
-  <section class="table_header">
-    <h1>Product Details</h1>
-  </section>
-  <section class="table_body">
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Image</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Status</th>
-          <th>Description</th>
-          <th>Category</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-       <tbody>
-        {{#each productData as |value index|}}
-        <tr>
-          <td>{{index}}</td>
-          <td><img src="images/{{value.images}}" alt="{{value.images}}"></td>
-          <td>{{value.name}}</td>
-          <td>{{value.price}}</td>
-          <td>{{value.status}}</td>
-          <td>{{value.description}}</td>
-          <td>{{value.category_id}}</td>
-          <td><a href="/edit-product?id={{value._id}}"><i class="fa-solid fa-pen-to-square"></i></a>
-      <a class="text-danger " href="/delete-product?id={{value._id}}" ><i class="fa-solid fa-trash"></i></a></td>
-        </tr>
-         {{/each}}
-       </tbody>
-    </table>
-  </section>
-</main>
-</div>-->
 </div><!--continer grid-->
 

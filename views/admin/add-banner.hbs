@@ -1,29 +1,31 @@
 <section class="main-container" >
    
-  {{#if err}}
+  {{#if message}}
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <strong> {{message}}</strong> 
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {{/if}}
  
-       <form action="/admin/add-category" method="post" id="form"  class="  p-2  width border border-5 border-secondary" enctype="multipart/form-data">
-        <h2 class="mb-3">Add Category</h2>
-        <div class="mb-3">
-    <label for="exampleInputFirstname" class="form-label">Category name</label>
-    <input type="text" class="form-control" id="exampleInputFirstname"  name="category" >
-     <div class="error text-danger"></div>
-  </div>
+       <form action="/admin/add-banner" method="post" id="form"  class="  p-2  width border border-5 border-secondary"  >
+        <h2 class="mb-3">Add Banner</h2>
+
     <div class="mb-3">
     <label for="exampleInputLastname" class="form-label">Image</label>
        <img src="" id="imagePreview1" alt="Preview" style="max-width: 300px; max-height: 300px; margin-top: 10px; display:none;"><br>
     <input type="file" class="form-control" id="exampleInputLastname"  name="image" onchange="previewImage()" >
      <div class="error text-danger"></div>
   </div>
+      <div class="mb-3">
+    <label for="exampleInputLastname1" class="form-label">Position <span class="text-warning">*where you want this banner (home1, home2, home3)</span></label>
+     
+    <input type="text" class="form-control" id="exampleInputLastname1"  name="position"  >
+     <div class="error text-danger"></div>
+  </div>
 
   
   
-  <button type="submit" class="btn btn-primary">ADD</button> <span>or <a href="/admin/category">return to category</a></span>
+  <button type="submit" class="btn btn-primary">ADD</button> <span>or <a href="/admin/banner">return to Banner</a></span>
 </form>
     </div>
  </section>
@@ -46,19 +48,17 @@
         }
     }
 
-
-
-
 const form = document.getElementById('form');
-const Name = document.getElementById('exampleInputFirstname');
- const Image = document.getElementById('exampleInputLastname');
+const Image = document.getElementById('exampleInputLastname');
+ const Position = document.getElementById('exampleInputLastname1');
+
 
  form.addEventListener('submit',e=>{
     e.preventDefault();
     validateInputs();
     });
 
-const setError = (element,message)=>{
+  const setError = (element,message)=>{
 const inputControl = element.parentElement;
 const errorDisplay = inputControl.querySelector('.error');
 
@@ -76,29 +76,28 @@ inputControl.classList.add('success');
 inputControl.classList.remove('error')
 }
 
-    const validateInputs=()=>{
-const nameValue = Name.value.trim();
+const validateInputs=()=>{
 const imageValue = Image.value.trim();
-
-if(nameValue === ''){
-setError(Name, 'Name is required');
-}else{
-setSuccess(Name)
-}
+const positionValue = Position.value.trim();
 
 if(imageValue === ''){
-setError(Image, 'File is required');
+setError(Image, 'Image is required');
 }else{
 setSuccess(Image)
+}
+
+if(positionValue === ''){
+setError(Position, 'Position is required');
+}else{
+setSuccess(Position)
 }
 
 const allInputsValid = document.querySelectorAll('.success').length === 2; // Adjust the count based on the number of input fields
  if (allInputsValid) {
    form.submit(); // Manually submit the form
  }
-};
 
 
-    
+}
 
-</script>
+    </script>

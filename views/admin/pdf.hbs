@@ -5,10 +5,10 @@
 <table class="table my-3 " id="userTable">
   
   <thead>
-    <tr>
+    <tr >
      
-      <th scope="col">No</th>
-      <th scope="col">Image1</th>
+      <!--<th scope="col">No</th>-->
+      <th scope="col">Image</th>
       <th scope="col">Name</th>
       <th scope="col">Quantity</th>
           <th scope="col">Total Price</th>
@@ -27,8 +27,8 @@
 
      {{#each orderData as |value index|}}
        
-        <tr>
-          <td scope="row">{{index}}</td>
+        <tr style="margin-bottom: 10px;">
+          <!--<td scope="row">{{index}}</td>-->
          
           <td>{{#each value.product}}<img src="/images/{{this.productId.images.[0]}}">{{/each}}</td>
           <td>{{#each value.product}}{{this.productId.name}},{{/each}}</td>

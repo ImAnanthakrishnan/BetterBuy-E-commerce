@@ -19,7 +19,7 @@
 <table class="table my-3 table-hover" id="userTable">
   <thead>
     <tr>
-      <th scope="col">No:</th>
+      <!--<th scope="col">No:</th>-->
       <th scope="col">Firstname</th>
       <th scope="col">Lastname</th>
       <th scope="col">Email</th>
@@ -32,7 +32,7 @@
  
     {{#each userData as |value index|}}
     <tr>
-      <th scope="row">{{index}}</th>
+      <!--<th scope="row">{{index}}</th>-->
       <td>{{value.fname}}</td>
       <td>{{value.lname}}</td>
       <td>{{value.email}}</td>
@@ -64,48 +64,24 @@
  
   </tbody>
 </table>
+
+<div class="pagination">
+  {{#if totalPages}}
+    {{#each pages}}
+      {{#if this.isCurrentPage}}
+        <span>{{this.page}}</span>
+      {{else}}
+        <a href="?page={{this.page}}">{{this.page}}</a>
+      {{/if}}
+    {{/each}}
+  {{/if}}
 </div>
 
 </div>
+
+
+
+
 <script>
-/*document.addEventListener('DOMContentLoaded', function () {
-  const toggleButtons = document.querySelectorAll('.toggle-block');
 
-  toggleButtons.forEach(function (button) {
-    button.addEventListener('click', async function () {
-      const userId = button.getAttribute('data-id');
-      const isBlocked = JSON.parse(button.getAttribute('data-blocked'));
-   
-
-      try {
-        const response = await fetch(
-          isBlocked ? `/unblock-user?id=${userId}` : `/block-user?id=${userId}`,
-          {
-            method: 'PATCH',
-          }
-        );
-
-        const responseData = await response.json();
-      
-
-        
-        if (responseData.success) {
-         
-          button.setAttribute('data-blocked', !isBlocked);
-
-          if (isBlocked) {
-            button.innerHTML = '<i class="fa-solid fa-lock"></i> Block';
-          } else {
-            button.innerHTML = '<i class="fa-solid fa-unlock"></i> Unblock';
-          }
-
-          const message = isBlocked ? 'User unblocked' : 'User blocked';
-          alert(message);
-        }
-      } catch (error) {
-        console.error(error.message);
-      }
-    });
-  });
-});*/
 </script>

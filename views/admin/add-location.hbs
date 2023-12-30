@@ -21,3 +21,58 @@
   </form>
 
 </section>
+
+<script>
+
+const form = document.getElementById('form');
+const District = document.getElementById('exampleInputFirstname');
+ const Pincode = document.getElementById('exampleInputFirstname1');
+
+ form.addEventListener('submit',e=>{
+    e.preventDefault();
+    validateInputs();
+    });
+
+const setError = (element,message)=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = message;
+inputControl.classList.add('error');
+inputControl.classList.remove('success');
+}
+
+const setSuccess = element=>{
+const inputControl = element.parentElement;
+const errorDisplay = inputControl.querySelector('.error');
+
+errorDisplay.innerText = '';
+inputControl.classList.add('success');
+inputControl.classList.remove('error')
+}
+
+const validateInputs=()=>{
+const districtValue = District.value.trim();
+const pincodeValue = Pincode.value.trim();
+
+if(districtValue === ''){
+setError(District, 'District is required');
+}else{
+setSuccess(District)
+}
+
+if(pincodeValue === ''){
+setError(Pincode, 'Pincode is required');
+}else{
+setSuccess(Pincode)
+}
+
+const allInputsValid = document.querySelectorAll('.success').length === 2; // Adjust the count based on the number of input fields
+ if (allInputsValid) {
+   form.submit(); // Manually submit the form
+ }
+
+}
+
+
+</script>
