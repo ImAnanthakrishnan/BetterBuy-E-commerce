@@ -84,7 +84,7 @@ app.use(session({
   saveUninitialized:true,//session to to uninitialised to save and store
   cookie:{maxAge:7200000}
 }));
-//app.use(cors());
+app.use(cors());
 
 
 
