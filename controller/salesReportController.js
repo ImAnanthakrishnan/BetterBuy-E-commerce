@@ -227,8 +227,8 @@ const exportPdfOrders = async(req,res)=>{
     try{
 
         
-    const browser = await puppeter.launch();
-
+    const browser = await puppeter.launch({ headless:"new"});
+  
     const page = await browser.newPage();
 const {startDate,endDate} = req.query;
 if(startDate && endDate){
