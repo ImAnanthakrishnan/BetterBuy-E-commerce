@@ -282,11 +282,12 @@ const queryString = new URLSearchParams(formData).toString();
   
             if (response.ok) {
                 const result = await response.json();
-           
+          
             if (result.message) {
                 showDynamicModal(result.message);
             }
             } else {
+              
                const result = await response.json();
                 console.log('Failed to add to cart');
                 console.log(result.error)

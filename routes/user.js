@@ -69,8 +69,8 @@ router.post('/resend-otp1',auth.isLogin,accountsController.resendOtp)
 
 //cart
 router.get('/cart',auth.isLogin,cartController.loadCart);
-router.post('/add-cart',auth.isLogin,upload.none(),cartController.add_to_cart);
-router.post('/add-cart1',auth.isLogin,upload.none(),cartController.add_to_cart1);
+router.post('/add-cart',upload.none(),cartController.add_to_cart);
+router.post('/add-cart1',upload.none(),cartController.add_to_cart1);
 router.post('/update-cart',auth.isLogin,cartController.updateCart);
 router.patch('/delete-product',auth.isLogin,cartController.deleteProduct);
 

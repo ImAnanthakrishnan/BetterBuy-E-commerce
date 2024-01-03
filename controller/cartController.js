@@ -24,7 +24,7 @@ const add_to_cart = async(req,res)=>{
     try{
     
         if(req.session.user_id){
-
+  
         const existingCart = await Cart.findOne({userId:req.body.userId});
  console.log(req.body.productName);
 
@@ -132,8 +132,8 @@ const add_to_cart = async(req,res)=>{
 }else{
     console.log('sdfdhs')
    //  res.redirect('/');
-  
     const response = {
+
        error:`Please login <a href="/" class="">Login</a>`
     }
  return res.status(400).json(response);
