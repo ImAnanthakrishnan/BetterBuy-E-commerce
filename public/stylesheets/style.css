@@ -1553,3 +1553,77 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
         width: 100%;
     }
 }
+
+.containeR{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.rating-wraP{
+	max-width: 480px;
+	margin: auto;
+	padding: 15px;
+	box-shadow: 0 0 3px 0 rgba(0,0,0,.2);
+	text-align: center;
+}
+
+.centeR{
+	width: 200px; 
+	margin: auto;
+}
+
+
+#rating-valuE{	
+	width: 110px;
+	margin: 40px auto 0;
+	padding: 10px 5px;
+	text-align: center;
+	box-shadow: inset 0 0 2px 1px rgba(46,204,113,.2);
+}
+
+/*styling star rating*/
+.ratinG{
+	border: none;
+	float: left;
+}
+
+.ratinG > input{
+	display: none;
+}
+
+.ratinG > label:before{
+	content: '\f005';
+	font-family: FontAwesome;
+	margin: 5px;
+	font-size: 1.5rem;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.ratinG > .half:before{
+	content: '\f089';
+	position: absolute;
+	cursor: pointer;
+}
+
+
+.ratinG > label{
+	color: #ddd;
+	float: right;
+	cursor: pointer;
+}
+
+.ratinG > input:checked ~ label,
+.ratinG:not(:checked) > label:hover, 
+.ratinG:not(:checked) > label:hover ~ label{
+	color: #2ce679;
+}
+
+.ratinG > input:checked + label:hover,
+.ratinG > input:checked ~ label:hover,
+.ratinG > label:hover ~ input:checked ~ label,
+.ratinG > input:checked ~ label:hover ~ label{
+	color: #2ddc76;
+}

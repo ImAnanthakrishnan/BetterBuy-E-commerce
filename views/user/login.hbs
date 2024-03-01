@@ -5,25 +5,29 @@
   background-repeat: no-repeat;
   background-size: cover;
   ">
- 
+
     <div
       class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+       
       <div class="d-flex align-items-center justify-content-center w-100">
         <div class="row justify-content-center w-100">
           <div class="col-md-8 col-lg-6 col-xxl-3">
             <div class="card mb-0" style="background: linear-gradient(to bottom, rgba(20, 219, 20, 1), rgba(255, 255, 255, 1));">
-              <div class="card-body">
-                <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100 text-decoration-none" >
+              <div style="display: grid; place-items:end;"><a href="/home" class="text-decoration-none "><button class="btn btn-secondary text-dark">Guest<i class="fa-solid fa-user ps-2"></i></button></a></div>
+              <div class="card-body"> 
+                
+    <!--            <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100 text-decoration-none" >
                  <!-- <img src="images/" width="180" alt="">-->
-                {{#if otpmsg}}
+              <!--  {{#if otpmsg}}
                   
                       <strong class="text-success text-center"> {{otpmsg}}</strong> 
                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                
                     {{/if}}
-                </a>
+                </a>-->
                  
                 <h3 class="text-center mb-3 "> Login</h3>
+               
                   {{#if message}}
                     <div class="alert alert-danger alert-dismissible fade show" role="alert" style="">
                       <strong> {{message}}</strong> 
@@ -45,7 +49,7 @@
                    
                 <form action="/" method="post" id="form1" >
                   <div class="mb-3 input-control1">
-                    <label for="exampleInputEmail1 " class="form-label">Username</label>
+                    <label for="exampleInputEmail1 " class="form-label">Email</label>
                     <input type="email" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" name="email">
                     <div class="error text-danger"></div>
                   </div>
